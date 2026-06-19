@@ -431,6 +431,11 @@
   .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
   .form-group input::placeholder { color: var(--grey); }
   .form-group select { appearance: none; cursor: pointer; }
+  .pickup-date-warn {
+    display: none; font-size: 0.7rem; color: #e08080;
+    margin-top: 8px; letter-spacing: 0.03em;
+  }
+  .pickup-date-warn.show { display: block; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
   .stripe-badge {
@@ -732,8 +737,15 @@
         <input type="tel" id="custPhone" placeholder="(616) 555-0100">
       </div>
       <div class="form-group">
-        <label>Preferred Pickup Date (min. 48 hrs notice)</label>
-        <input type="date" id="pickupDate">
+        <label>Preferred Pickup Date (min. 48 hrs notice, Tue–Sat)</label>
+        <input type="date" id="pickupDate" onchange="validatePickupDate(this)">
+        <div class="pickup-date-warn" id="pickupDateWarn">Pickup is available Tuesday–Saturday only. Please choose a different date.</div>
+      </div>
+      <div class="form-group">
+        <label>Pickup Time</label>
+        <select id="pickupTime">
+          <option value="">— Select a time —</option>
+        </select>
       </div>
       <div class="stripe-badge">
         🔒 <strong>Secured by Stripe</strong> · Card details encrypted, never stored
@@ -802,6 +814,22 @@ function init() {
   minDate.setDate(minDate.getDate() + 2);
   const dateInput = document.getElementById('pickupDate');
   if (dateInput) dateInput.min = minDate.toISOString().split('T')[0];
+
+  // Populate pickup time slots: Tue-Sat, 10am-6pm, every 30 min (last slot 5:30pm)
+  const timeSelect = document.getElementById('pickupTime');
+  if (timeSelect) {
+    for (let h = 10; h < 18; h++) {
+      for (let m of [0, 30]) {
+        const hour12 = h > 12 ? h - 12 : h;
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const label = `${hour12}:${m === 0 ? '00' : '30'} ${ampm}`;
+        const opt = document.createElement('option');
+        opt.value = label;
+        opt.textContent = label;
+        timeSelect.appendChild(opt);
+      }
+    }
+  }
 
   // Individual rows
   const indivContainer = document.getElementById('individualRows');
@@ -1085,14 +1113,37 @@ function closeCheckout() {
 }
 
 // ── PLACE ORDER ──────────────────────────────────────────────
+function validatePickupDate(input) {
+  const warn = document.getElementById('pickupDateWarn');
+  if (!input.value) {
+    warn.classList.remove('show');
+    return true;
+  }
+  // Parse as local date to avoid timezone shift
+  const [y, m, d] = input.value.split('-').map(Number);
+  const day = new Date(y, m - 1, d).getDay(); // 0=Sun, 1=Mon, ... 2=Tue, 6=Sat
+  const isValidDay = day >= 2 && day <= 6; // Tue(2)–Sat(6)
+  warn.classList.toggle('show', !isValidDay);
+  if (!isValidDay) input.setCustomValidity('Pickup is Tue–Sat only');
+  else input.setCustomValidity('');
+  return isValidDay;
+}
+
 function placeOrder() {
   const name = document.getElementById('custName').value.trim();
   const email = document.getElementById('custEmail').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
-  const date = document.getElementById('pickupDate').value;
+  const dateInput = document.getElementById('pickupDate');
+  const date = dateInput.value;
+  const time = document.getElementById('pickupTime').value;
 
-  if (!name || !email || !phone || !date) {
-    alert('Please fill in all contact and pickup details.');
+  if (!name || !email || !phone || !date || !time) {
+    alert('Please fill in all contact and pickup details, including a pickup time.');
+    return;
+  }
+
+  if (!validatePickupDate(dateInput)) {
+    alert('Pickup is available Tuesday–Saturday only. Please choose a different date.');
     return;
   }
 
@@ -1124,6 +1175,13 @@ function finishOrder() {
   });
   document.getElementById('flightBtn').textContent = 'Add to Order';
   document.getElementById('flightBtn').classList.remove('added');
+  // Reset form fields
+  document.getElementById('custName').value = '';
+  document.getElementById('custEmail').value = '';
+  document.getElementById('custPhone').value = '';
+  document.getElementById('pickupDate').value = '';
+  document.getElementById('pickupTime').value = '';
+  document.getElementById('pickupDateWarn').classList.remove('show');
 }
 
 // ── FORMAT HELPERS ───────────────────────────────────────────
