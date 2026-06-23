@@ -237,45 +237,6 @@
     font-weight: 400;
   }
 
-  /* ── PACK SIZES SECTION ── */
-  .pack-row {
-    background: var(--card-bg); padding: 24px;
-    display: flex; flex-direction: column;
-    gap: 0; margin-bottom: 2px;
-    transition: background 0.25s; border: 1px solid transparent;
-  }
-  .pack-row-top {
-    display: flex; gap: 20px; align-items: flex-start;
-  }
-  .pack-row-bottom {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 10px; margin-top: 16px; padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  .pack-row:hover { background: #181818; border-color: rgba(200,169,126,0.1); }
-  .pack-select-wrap { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
-  .pack-dropdown {
-    appearance: none; -webkit-appearance: none;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(200,169,126,0.25);
-    color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.78rem;
-    padding: 10px 36px 10px 14px; letter-spacing: 0.05em;
-    cursor: pointer; outline: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8A97E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center;
-    transition: border-color 0.2s;
-    min-width: 180px;
-  }
-  .pack-dropdown:focus { border-color: var(--accent); }
-  .pack-dropdown option { background: #1a1a1a; color: var(--white); }
-  .pack-add-btn {
-    background: transparent; border: 1px solid rgba(200,169,126,0.3); color: var(--accent);
-    padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
-    font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.25s; white-space: nowrap;
-  }
-  .pack-add-btn:hover { background: var(--accent); color: var(--black); border-color: var(--accent); }
-  .pack-controls-row { display: flex; gap: 10px; align-items: center; }
-
   /* ── MIN ORDER NOTICE ── */
   .min-notice {
     font-size: 0.72rem; color: var(--grey); letter-spacing: 0.05em;
@@ -627,12 +588,12 @@
     </div>
 
     <!-- COOKIE FLIGHT -->
-    <div class="menu-section-label">The Signature</div>
+    <div class="menu-section-label">The Starter Box</div>
     <div class="flight-card">
       <div class="flight-icon">🍪✨</div>
       <div class="flight-info">
-        <div class="flight-tag">Curated Box</div>
-        <div class="flight-name">The Cookie Flight</div>
+        <div class="flight-tag">Curated · 3 Cookies</div>
+        <div class="flight-name">The Starter Box</div>
         <div class="flight-desc">A curated trio of fan favorites — Classic Chocolate Chip, M&amp;M, and Triple Chocolate. The perfect introduction to The Cookie Edit, packed by us.</div>
         <div class="flight-flavors" id="flightFlavors"></div>
         <div class="flight-footer">
@@ -646,12 +607,11 @@
     </div>
 
     <!-- INDIVIDUAL COOKIES -->
-    <div class="menu-section-label">Individual Cookies — $5 each</div>
+    <div class="menu-section-label">Build Your Box — Mix &amp; Match</div>
     <div id="individualRows"></div>
 
     <!-- PACKS -->
-    <div class="menu-section-label">Packs — Single Flavor</div>
-    <div id="packRows"></div>
+    
 
   </div>
 
@@ -788,7 +748,7 @@ const COOKIES = [
   { id: 'cc2', name: 'Cookies & Cream',           emoji: '🖤', photo: 'images/cookies-and-cream.png', desc: 'Chocolate dough, crushed Oreos, and white chocolate chips.' },
 ];
 
-const PACK_PRICES = { 4: 14, 6: 20, 12: 35 };
+const BOX_PRICES = { 4: 14, 6: 20, 12: 35 }; // tiers: 4-5=$14, 6-11=$20, 12+=$35
 const INDIV_PRICE = 4;
 const FLIGHT_PRICE = 10;
 const MIN_COOKIES = 4;
@@ -850,7 +810,7 @@ function init() {
         </div>
       </div>
       <div class="cookie-row-bottom">
-        <div class="cookie-price-tag">$${INDIV_PRICE} each</div>
+        <div class="cookie-price-tag">$4 each · boxes from $14</div>
         <div style="display:flex;align-items:center;gap:12px;">
           <button class="add-cookie-btn" id="add-btn-${c.id}" onclick="firstAdd('${c.id}')">+ Add</button>
           <div class="stepper-wrap" id="stepper-${c.id}">
@@ -864,37 +824,15 @@ function init() {
     `;
     indivContainer.appendChild(row);
   });
+}
 
-  // Pack rows
-  const packContainer = document.getElementById('packRows');
-  COOKIES.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.className = 'pack-row';
-    row.id = `pack-row-${c.id}`;
-    const thumbPack = c.photo
-      ? `<div class="cookie-emoji-box" style="padding:0;overflow:hidden;"><img src="${c.photo}" style="width:100%;height:100%;object-fit:contain;" alt="${c.name}"></div>`
-      : `<div class="cookie-emoji-box">${c.emoji}</div>`;
-    row.innerHTML = `
-      <div class="pack-row-top">
-        ${thumbPack}
-        <div class="cookie-row-info">
-          <div class="cookie-row-num">0${i+1}</div>
-          <div class="cookie-row-name">${c.name}</div>
-          <div class="cookie-row-desc">${c.desc}</div>
-        </div>
-      </div>
-      <div class="pack-row-bottom">
-        <select class="pack-dropdown" id="pack-select-${c.id}">
-          <option value="">— Select a Pack —</option>
-          <option value="4">4-Pack · $14</option>
-          <option value="6">6-Pack · $20</option>
-          <option value="12">Dozen · $35</option>
-        </select>
-        <button class="pack-add-btn" onclick="addPack('${c.id}')">Add Pack</button>
-      </div>
-    `;
-    packContainer.appendChild(row);
-  });
+
+// ── TIERED BOX PRICING ────────────────────────────────────
+function getBoxPrice(count) {
+  if (count >= 12) return { price: 35, label: 'Dozen Box', savings: Math.max(0, count * 4 - 35) };
+  if (count >= 6)  return { price: 20, label: '6-Box',     savings: Math.max(0, count * 4 - 20) };
+  if (count >= 4)  return { price: 14, label: '4-Box',     savings: Math.max(0, count * 4 - 14) };
+  return { price: count * 4, label: null, savings: 0 };
 }
 
 // ── INDIVIDUAL LOGIC ────────────────────────────────────────
@@ -913,7 +851,6 @@ function adjustIndiv(id, delta) {
 
   if (newQty === 0) {
     delete cart[key];
-    // Show add button, hide stepper
     const addBtn = document.getElementById(`add-btn-${id}`);
     const stepper = document.getElementById(`stepper-${id}`);
     if (addBtn) addBtn.style.display = '';
@@ -925,7 +862,7 @@ function adjustIndiv(id, delta) {
       emoji: cookie.emoji,
       qty: newQty,
       unitPrice: INDIV_PRICE,
-      price: newQty * INDIV_PRICE
+      price: newQty * INDIV_PRICE // individual price; totalPrice() applies tier
     };
   }
 
@@ -934,31 +871,6 @@ function adjustIndiv(id, delta) {
   sub.textContent = newQty > 0 ? `$${newQty * INDIV_PRICE}` : '';
 
   renderSummary();
-}
-
-// ── PACK LOGIC ───────────────────────────────────────────────
-function addPack(id) {
-  const sel = document.getElementById(`pack-select-${id}`);
-  const size = parseInt(sel.value);
-  if (!size) { sel.focus(); return; }
-
-  const cookie = COOKIES.find(c => c.id === id);
-  const key = `pack_${id}_${size}`;
-  const price = PACK_PRICES[size];
-
-  cart[key] = {
-    type: 'pack',
-    name: cookie.name,
-    emoji: cookie.emoji,
-    qty: 1,
-    packSize: size,
-    unitPrice: price,
-    price: price
-  };
-
-  sel.value = '';
-  renderSummary();
-  flashBtn(document.querySelector(`#pack-row-${id} .pack-add-btn`));
 }
 
 // ── FLIGHT LOGIC ─────────────────────────────────────────────
@@ -971,7 +883,7 @@ function addFlight() {
   } else {
     cart['flight'] = {
       type: 'flight',
-      name: 'The Cookie Flight',
+      name: 'The Starter Box',
       emoji: '🍪✨',
       qty: 1,
       unitPrice: FLIGHT_PRICE,
@@ -1015,7 +927,15 @@ function totalCookieCount() {
 }
 
 function totalPrice() {
-  return Object.values(cart).reduce((s, item) => s + item.price, 0);
+  // Individual cookies use tiered box pricing based on total count
+  let indivCount = 0;
+  let otherTotal = 0;
+  Object.values(cart).forEach(item => {
+    if (item.type === 'individual') indivCount += item.qty;
+    else otherTotal += item.price;
+  });
+  const { price: indivTotal } = getBoxPrice(indivCount);
+  return indivTotal + otherTotal;
 }
 
 // ── RENDER SUMMARY ───────────────────────────────────────────
@@ -1035,14 +955,23 @@ function renderSummary() {
   // Items
   const container = document.getElementById('summaryItems');
   container.innerHTML = '';
+
+  // Calculate tiered pricing
+  const indivItems2 = Object.values(cart).filter(i => i.type === 'individual');
+  const indivCount2 = indivItems2.reduce((s,i) => s + i.qty, 0);
+  const { price: indivBoxPrice, label: tierLabel, savings } = getBoxPrice(indivCount2);
+  const retailPrice2 = indivCount2 * INDIV_PRICE;
+
   keys.forEach(key => {
     const item = cart[key];
     const line = document.createElement('div');
     line.className = 'summary-line';
     let sub = '';
-    if (item.type === 'individual') sub = `${item.qty} × $${item.unitPrice}`;
-    else if (item.type === 'pack') sub = `${item.packSize}-Pack`;
-    else if (item.type === 'flight') sub = '3 cookies · curated flavors';
+    let displayPrice = item.price;
+    if (item.type === 'individual') {
+      sub = `${item.qty} × $${item.unitPrice} each`;
+      displayPrice = item.qty * item.unitPrice; // show retail before discount
+    } else if (item.type === 'flight') sub = 'Curated · CC, M&amp;M, Triple Choc';
 
     line.innerHTML = `
       <div>
@@ -1050,19 +979,42 @@ function renderSummary() {
         <div class="summary-line-sub">${sub}</div>
       </div>
       <div style="display:flex;align-items:center;gap:4px;">
-        <div class="summary-line-price">$${item.price}</div>
+        <div class="summary-line-price">$${displayPrice}</div>
         <button class="summary-remove" onclick="removeItem('${key}')" title="Remove">✕</button>
       </div>
     `;
     container.appendChild(line);
   });
 
-  // Total
-  document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+  // Show discount line if applicable
+  if (savings > 0 && tierLabel && indivCount2 > 0) {
+    const discLine = document.createElement('div');
+    discLine.className = 'summary-line';
+    discLine.innerHTML = `
+      <div>
+        <div class="summary-line-name" style="color:#7AAD85;">🎉 ${tierLabel} discount</div>
+        <div class="summary-line-sub">Box pricing applied</div>
+      </div>
+      <div class="summary-line-price" style="color:#7AAD85;">−$${savings}</div>
+    `;
+    container.appendChild(discLine);
+  }
 
-  // Count note
+  // Total with tiered pricing (reuse indivCount2, indivBoxPrice, tierLabel, savings from above)
+  const otherTotal2 = Object.values(cart).filter(i => i.type !== 'individual').reduce((s,i) => s + i.price, 0);
+  const grandTotal = indivBoxPrice + otherTotal2;
+  document.getElementById('summaryTotal').textContent = `$${grandTotal.toFixed(2)}`;
+
+  // Count note with tier info
   const noteEl = document.getElementById('summaryCountNote');
-  noteEl.textContent = `${count} cookie${count !== 1 ? 's' : ''} in your order`;
+  if (tierLabel && indivCount2 > 0 && savings > 0) {
+    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:var(--accent)">You're saving $${savings}!</span>`;
+  } else if (indivCount2 > 0 && indivCount2 < 4) {
+    const needed = 4 - indivCount2;
+    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:#C8A97E">Add ${needed} more to unlock the $14 box price</span>`;
+  } else {
+    noteEl.textContent = `${count} cookie${count !== 1 ? 's' : ''} in your order`;
+  }
 
   // Min notice
   const minNotice = document.getElementById('minNotice');
@@ -1089,19 +1041,53 @@ function openCheckout() {
     document.getElementById('checkoutWarn').classList.add('show');
     return;
   }
+
   // Populate modal summary
   const container = document.getElementById('modalSummaryItems');
   container.innerHTML = '';
-  Object.values(cart).forEach(item => {
-    let label = item.name;
-    if (item.type === 'individual') label += ` (×${item.qty})`;
-    else if (item.type === 'pack') label += ` — ${item.packSize}-Pack`;
-    else if (item.type === 'flight') label += ' (Curated 4-box)';
+
+  // Separate individual cookies from other items (flight)
+  const indivItems = Object.values(cart).filter(i => i.type === 'individual');
+  const otherItems = Object.values(cart).filter(i => i.type !== 'individual');
+
+  const indivCount = indivItems.reduce((s, i) => s + i.qty, 0);
+  const { price: indivBoxPrice, label: tierLabel, savings } = getBoxPrice(indivCount);
+  const retailPrice = indivCount * INDIV_PRICE;
+
+  // Render individual cookie lines at $4 each (retail)
+  indivItems.forEach(item => {
     const row = document.createElement('div');
     row.className = 'modal-summary-row';
-    row.innerHTML = `<span>${label}</span><span>$${item.price}</span>`;
+    row.innerHTML = `<span>${item.emoji} ${item.name} (×${item.qty})</span><span>$${item.qty * INDIV_PRICE}</span>`;
     container.appendChild(row);
   });
+
+  // Show discount line if applicable
+  if (savings > 0 && tierLabel) {
+    const subtotalRow = document.createElement('div');
+    subtotalRow.className = 'modal-summary-row';
+    subtotalRow.style.color = 'var(--grey)';
+    subtotalRow.style.fontSize = '0.78rem';
+    subtotalRow.innerHTML = `<span>Subtotal (${indivCount} cookies)</span><span>$${retailPrice}</span>`;
+    container.appendChild(subtotalRow);
+
+    const discountRow = document.createElement('div');
+    discountRow.className = 'modal-summary-row';
+    discountRow.style.color = '#7AAD85';
+    discountRow.innerHTML = `<span>🎉 ${tierLabel} discount</span><span>−$${savings}</span>`;
+    container.appendChild(discountRow);
+  }
+
+  // Render other items (Starter Box etc)
+  otherItems.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'modal-summary-row';
+    let label = item.name;
+    if (item.type === 'flight') label += ' (Curated 3-box)';
+    row.innerHTML = `<span>${item.emoji} ${label}</span><span>$${item.price}</span>`;
+    container.appendChild(row);
+  });
+
   document.getElementById('modalTotal').textContent = `$${totalPrice().toFixed(2)}`;
   document.getElementById('checkoutModal').classList.add('open');
   document.getElementById('successScreen').classList.remove('show');
