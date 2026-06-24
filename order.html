@@ -816,7 +816,7 @@ function init() {
         </div>
       </div>
       <div class="cookie-row-bottom">
-        <div class="cookie-price-tag">$4 each · 6-pack $20 · dozen $35</div>
+        <div class="cookie-price-tag">1–3: $4 · 4–11: $3.50 · 12+: $3.25</div>
         <div style="display:flex;align-items:center;gap:12px;">
           <button class="add-cookie-btn" id="add-btn-${c.id}" onclick="firstAdd('${c.id}')">+ Add</button>
           <div class="stepper-wrap" id="stepper-${c.id}">
@@ -834,26 +834,24 @@ function init() {
 
 
 // ── PRICING ────────────────────────────────────────────────
-// Individual: $4 each | 6-pack: $20 | Dozen: $35
-// Starter Box: $10 (handled separately as flight)
+// 1-3 cookies: $4.00 each | 4-11: $3.50 each | 12+: $3.25 each
 function getBoxPrice(count) {
   if (count === 0) return { price: 0, label: null, savings: 0 };
+  const retail = count * 4;
+  let price, label;
   if (count >= 12) {
-    const dozens = Math.floor(count / 12);
-    const extras = count % 12;
-    const price = (dozens * 35) + (extras * 4);
-    const retail = count * 4;
-    return { price, label: 'Dozen', savings: Math.max(0, retail - price) };
+    price = count * 3.25;
+    label = 'Dozen rate ($3.25/cookie)';
+  } else if (count >= 4) {
+    price = count * 3.50;
+    label = 'Box rate ($3.50/cookie)';
+  } else {
+    price = count * 4;
+    label = null;
   }
-  if (count >= 6) {
-    const price = 20 + ((count - 6) * 4);
-    const retail = count * 4;
-    return { price, label: '6-Pack', savings: Math.max(0, retail - price) };
-  }
-  // 1–5: $4 each, no discount
-  return { price: count * 4, label: null, savings: 0 };
+  const savings = Math.max(0, retail - price);
+  return { price, label: savings > 0 ? label : null, savings };
 }
-
 // ── INDIVIDUAL LOGIC ────────────────────────────────────────
 function firstAdd(id) {
   // Hide add button, show stepper, add 1
@@ -1027,10 +1025,10 @@ function renderSummary() {
   // Count note with tier info
   const noteEl = document.getElementById('summaryCountNote');
   if (tierLabel && indivCount2 > 0 && savings > 0) {
-    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:var(--accent)">You're saving $${savings}!</span>`;
-  } else if (indivCount2 > 0 && indivCount2 < 6) {
-    const needed = 6 - indivCount2;
-    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:#C8A97E">Add ${needed} more to unlock the $20 6-pack price</span>`;
+    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:var(--accent)">You're saving $${savings.toFixed(2)}!</span>`;
+  } else if (indivCount2 > 0 && indivCount2 < 4) {
+    const needed = 4 - indivCount2;
+    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:#C8A97E">Add ${needed} more to unlock $3.50/cookie</span>`;
   } else {
     noteEl.textContent = `${count} cookie${count !== 1 ? 's' : ''} in your order`;
   }
