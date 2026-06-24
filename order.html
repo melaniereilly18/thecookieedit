@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Order — The Cookie Edit</title>
-<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAAAIAD3AAAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAQAAAAEAgGAAAAH/P/YQAAAL5JREFUeJytUzEOwyAQMxm9Z84nMmfoT/qHKCNDx6h/yMwnMvMiVrr0KjguqFJ7EkKysM+Yw8EoktnCU0pOYw0g5PNYK/x2f5oi7oooBCmNN25I5hh8JtldcuYrcgw+x+DzMuFSZLACO48V85gAANv2AADMY2pyIZnN7suEzxIH4ka7GKzu++4BoNrFiXbRCIjtkqT3roBF0o6aIHQO1t3LDMqzgzWe3Y5FVVzrNXRna5B+HuX/fSZLpHvnd70AVZjOr7fPA2oAAAAASUVORK5CYII=">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #0A0A0A;
@@ -769,11 +769,17 @@ function init() {
     ff.appendChild(chip);
   });
 
-  // Set min date for pickup (48hrs from now)
-  const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 2);
+  // Set min date for pickup (strict 48hrs from now)
+  const now = new Date();
+  const minPickup = new Date(now.getTime() + 48 * 60 * 60 * 1000); // exactly 48hrs from now
   const dateInput = document.getElementById('pickupDate');
-  if (dateInput) dateInput.min = minDate.toISOString().split('T')[0];
+  if (dateInput) {
+    // Format as YYYY-MM-DD in local time
+    const y = minPickup.getFullYear();
+    const m = String(minPickup.getMonth() + 1).padStart(2, '0');
+    const d = String(minPickup.getDate()).padStart(2, '0');
+    dateInput.min = `${y}-${m}-${d}`;
+  }
 
   // Populate pickup time slots: Tue-Sat, 10am-6pm, every 30 min (last slot 5:30pm)
   const timeSelect = document.getElementById('pickupTime');
@@ -1101,18 +1107,34 @@ function closeCheckout() {
 // ── PLACE ORDER ──────────────────────────────────────────────
 function validatePickupDate(input) {
   const warn = document.getElementById('pickupDateWarn');
-  if (!input.value) {
-    warn.classList.remove('show');
-    return true;
+  if (!input.value) { warn.classList.remove('show'); return true; }
+
+  const [y, mo, d] = input.value.split('-').map(Number);
+  const chosen = new Date(y, mo - 1, d);
+  const day = chosen.getDay(); // 0=Sun, 1=Mon, 2=Tue ... 6=Sat
+
+  // Check Tue-Sat
+  const isValidDay = day >= 2 && day <= 6;
+  // Check 48hr minimum
+  const minPickup = new Date(Date.now() + 48 * 60 * 60 * 1000);
+  const minDate = new Date(minPickup.getFullYear(), minPickup.getMonth(), minPickup.getDate());
+  const isFarEnough = chosen >= minDate;
+
+  if (!isValidDay) {
+    warn.textContent = 'Pickup is available Tuesday–Saturday only. Please choose a different date.';
+    warn.classList.add('show');
+    input.setCustomValidity('Pickup is Tue–Sat only');
+    return false;
   }
-  // Parse as local date to avoid timezone shift
-  const [y, m, d] = input.value.split('-').map(Number);
-  const day = new Date(y, m - 1, d).getDay(); // 0=Sun, 1=Mon, ... 2=Tue, 6=Sat
-  const isValidDay = day >= 2 && day <= 6; // Tue(2)–Sat(6)
-  warn.classList.toggle('show', !isValidDay);
-  if (!isValidDay) input.setCustomValidity('Pickup is Tue–Sat only');
-  else input.setCustomValidity('');
-  return isValidDay;
+  if (!isFarEnough) {
+    warn.textContent = 'We need at least 48 hours notice. Please choose a later date.';
+    warn.classList.add('show');
+    input.setCustomValidity('Need 48hrs notice');
+    return false;
+  }
+  warn.classList.remove('show');
+  input.setCustomValidity('');
+  return true;
 }
 
 function placeOrder() {
