@@ -387,11 +387,15 @@
     width: 100%; padding: 13px 16px;
     background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
     color: var(--white); font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem; font-weight: 300; outline: none; transition: border-color 0.2s;
+    font-size: 0.9rem; font-weight: 400; outline: none; transition: border-color 0.2s;
   }
   .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
   .form-group input::placeholder { color: var(--grey); }
   .form-group select { appearance: none; cursor: pointer; }
+  .form-group select option {
+    background: #1a1a1a; color: var(--white);
+    font-weight: 400; font-size: 0.9rem; padding: 8px;
+  }
 
   /* Make date picker calendar icon visible */
   input[type="date"] { cursor: pointer; }
@@ -1236,9 +1240,7 @@ function flashBtn(btn) {
 }
 
 // ── CLOSE MODAL ON OVERLAY CLICK ────────────────────────────
-document.getElementById('checkoutModal').addEventListener('click', function(e) {
-  if (e.target === this) closeCheckout();
-});
+// Disabled — clicking outside modal no longer closes it to prevent accidental order loss
 
 // ── RUN ──────────────────────────────────────────────────────
 init();
