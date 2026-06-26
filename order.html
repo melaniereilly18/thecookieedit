@@ -771,17 +771,19 @@ function init() {
     ff.appendChild(chip);
   });
 
-  // Set min date for pickup (strict 48hrs from now)
-  const now = new Date();
-  const minPickup = new Date(now.getTime() + 48 * 60 * 60 * 1000); // exactly 48hrs from now
-  const dateInput = document.getElementById('pickupDate');
-  if (dateInput) {
-    // Format as YYYY-MM-DD in local time
-    const y = minPickup.getFullYear();
-    const m = String(minPickup.getMonth() + 1).padStart(2, '0');
-    const d = String(minPickup.getDate()).padStart(2, '0');
-    dateInput.min = `${y}-${m}-${d}`;
+  // Set min date for pickup (strict 48hrs from now) — also called in openCheckout
+  function setMinPickupDate() {
+    const now = new Date();
+    const minPickup = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const dateInput = document.getElementById('pickupDate');
+    if (dateInput) {
+      const y = minPickup.getFullYear();
+      const m = String(minPickup.getMonth() + 1).padStart(2, '0');
+      const d = String(minPickup.getDate()).padStart(2, '0');
+      dateInput.min = `${y}-${m}-${d}`;
+    }
   }
+  setMinPickupDate();
 
   // Populate pickup time slots: Tue-Sat, 10am-6pm, every 30 min (last slot 5:30pm)
   const timeSelect = document.getElementById('pickupTime');
@@ -1111,6 +1113,7 @@ function openCheckout() {
   document.getElementById('checkoutModal').classList.add('open');
   document.getElementById('successScreen').classList.remove('show');
   document.getElementById('checkoutBody').style.display = 'block';
+  setMinPickupDate(); // refresh min date each time modal opens
 }
 
 function closeCheckout() {
