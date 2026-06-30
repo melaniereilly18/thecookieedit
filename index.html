@@ -310,6 +310,11 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ── MOBILE ── */
+  .flavor-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  }
+
   @media (max-width: 640px) {
     nav {
       padding: 16px 20px;
@@ -377,9 +382,9 @@
 
     /* Flavor grid - stack to 1 column on mobile */
     .flavor-section { padding: 56px 20px !important; }
-    .flavor-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
-    .flavor-cell { aspect-ratio: 4/3 !important; }
-    .flavor-img { object-fit: cover !important; object-position: center !important; }
+    .flavor-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .flavor-cell { aspect-ratio: 1.4/1 !important; }
+    .flavor-img { object-fit: contain !important; padding: 12px; box-sizing: border-box; }
     .flavor-caption {
       position: static !important; padding: 16px 4px 0 !important;
       background: none !important;
@@ -497,21 +502,21 @@
   <div class="flavor-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
     <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
       <img src="images/chocolate-chip.png" alt="Classic Chocolate Chip" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+      <div class="flavor-caption">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Chocolate Chip</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">The one that started it all.</div>
       </div>
     </div>
     <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
       <img src="images/red-velvet.png" alt="Red Velvet" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+      <div class="flavor-caption">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Red Velvet</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">Show-stopping by design.</div>
       </div>
     </div>
     <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
       <img src="images/cookies-and-cream.png" alt="Cookies and Cream" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+      <div class="flavor-caption">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Cookies &amp; Cream</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">Dark, indulgent, unforgettable.</div>
       </div>
