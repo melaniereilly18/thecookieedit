@@ -362,6 +362,32 @@
     }
     .footer-info { text-align: left; }
     .footer-right { text-align: left; }
+
+    /* Delivery strip - stack vertically on mobile */
+    .delivery-strip { padding: 16px 20px !important; flex-direction: column !important; text-align: center; }
+
+    /* Hero photo - stack text and button vertically */
+    .hero-photo-wrap { max-height: 60vh !important; }
+    .hero-photo-img { height: 60vh !important; }
+    .hero-photo-overlay {
+      flex-direction: column !important; align-items: flex-start !important;
+      gap: 16px !important; bottom: 24px !important; left: 20px !important; right: 20px !important;
+    }
+    .hero-photo-btn { width: 100%; text-align: center; }
+
+    /* Flavor grid - stack to 1 column on mobile */
+    .flavor-section { padding: 56px 20px !important; }
+    .flavor-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .flavor-cell { aspect-ratio: 4/3 !important; }
+    .flavor-img { object-fit: cover !important; object-position: center !important; }
+    .flavor-caption {
+      position: static !important; padding: 16px 4px 0 !important;
+      background: none !important;
+    }
+
+    /* Follow grid - 2 columns on mobile instead of 4 */
+    .follow-section { padding: 56px 20px !important; }
+    .follow-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
   }
 </style>
 </head>
@@ -438,7 +464,7 @@
 
 
 <!-- DELIVERY STRIP -->
-<div style="background: var(--accent); padding: 20px 48px; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+<div class="delivery-strip" style="background: var(--accent); padding: 20px 48px; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
   <span style="font-size: 1.2rem;">🚗</span>
   <span style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; color: var(--black); letter-spacing: 0.05em;">
     Free Saturday delivery within Byron Center
@@ -448,19 +474,19 @@
 </div>
 
 <!-- HERO PHOTO -->
-<div style="position: relative; width: 100%; overflow: hidden; max-height: 70vh;">
-  <img src="images/hero-cookie.jpg" alt="The Cookie Edit — Oversized, indulgent cookies" style="width: 100%; height: 70vh; object-fit: cover; object-position: center 30%; display: block; filter: brightness(0.88);">
-  <div style="position: absolute; bottom: 40px; left: 48px; right: 48px; display: flex; justify-content: space-between; align-items: flex-end;">
+<div class="hero-photo-wrap" style="position: relative; width: 100%; overflow: hidden; max-height: 70vh;">
+  <img src="images/hero-cookie.jpg" alt="The Cookie Edit — Oversized, indulgent cookies" class="hero-photo-img" style="width: 100%; height: 70vh; object-fit: cover; object-position: center 30%; display: block; filter: brightness(0.88);">
+  <div class="hero-photo-overlay" style="position: absolute; bottom: 40px; left: 48px; right: 48px; display: flex; justify-content: space-between; align-items: flex-end;">
     <div>
       <div style="font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px;">The Cookie Edit</div>
       <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; color: var(--white); line-height: 1.1;">Oversized. Indulgent.<br><em style="font-style: italic; color: var(--accent);">Made to be seen.</em></div>
     </div>
-    <a href="order.html" style="background: var(--accent); color: var(--black); padding: 14px 32px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.25s;">Order Now</a>
+    <a href="order.html" class="hero-photo-btn" style="background: var(--accent); color: var(--black); padding: 14px 32px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: background 0.25s;">Order Now</a>
   </div>
 </div>
 
 <!-- FLAVOR TEASER -->
-<div style="padding: 80px 48px; max-width: 1300px; margin: 0 auto;">
+<div style="padding: 80px 48px; max-width: 1300px; margin: 0 auto;" class="flavor-section">
   <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px;">
     <div>
       <div style="font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px;">The Collection</div>
@@ -468,24 +494,24 @@
     </div>
     <a href="order.html" style="font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(200,169,126,0.4); padding-bottom: 2px;">Build Your Box →</a>
   </div>
-  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
-    <div style="position: relative; overflow: hidden; aspect-ratio: 1;">
-      <img src="images/chocolate-chip.png" alt="Classic Chocolate Chip" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+  <div class="flavor-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+    <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
+      <img src="images/chocolate-chip.png" alt="Classic Chocolate Chip" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
+      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Chocolate Chip</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">The one that started it all.</div>
       </div>
     </div>
-    <div style="position: relative; overflow: hidden; aspect-ratio: 1;">
-      <img src="images/red-velvet.png" alt="Red Velvet" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+    <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
+      <img src="images/red-velvet.png" alt="Red Velvet" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
+      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Red Velvet</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">Show-stopping by design.</div>
       </div>
     </div>
-    <div style="position: relative; overflow: hidden; aspect-ratio: 1;">
-      <img src="images/cookies-and-cream.png" alt="Cookies and Cream" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
-      <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+    <div class="flavor-cell" style="position: relative; overflow: hidden; aspect-ratio: 1;">
+      <img src="images/cookies-and-cream.png" alt="Cookies and Cream" class="flavor-img" style="width: 100%; height: 100%; object-fit: contain; background: #111; display: block;">
+      <div class="flavor-caption" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.85));">
         <div style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">Cookies &amp; Cream</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; color: var(--white); font-style: italic;">Dark, indulgent, unforgettable.</div>
       </div>
@@ -494,11 +520,11 @@
 </div>
 
 <!-- FOLLOW US -->
-<div style="border-top: 1px solid rgba(255,255,255,0.06); padding: 80px 48px; text-align: center;">
+<div style="border-top: 1px solid rgba(255,255,255,0.06); padding: 80px 48px; text-align: center;" class="follow-section">
   <div style="font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px;">Follow Along</div>
   <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; margin-bottom: 8px;">@thecookieedit_bakery</h2>
   <p style="font-size: 0.85rem; color: #6B6B6B; margin-bottom: 40px;">Instagram · TikTok · Facebook</p>
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; max-width: 900px; margin: 0 auto 40px;">
+  <div class="follow-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; max-width: 900px; margin: 0 auto 40px;">
     <div style="aspect-ratio: 1; overflow: hidden;">
       <img src="images/hero-cookie.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: brightness(0.9);">
     </div>
