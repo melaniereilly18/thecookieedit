@@ -707,7 +707,7 @@
         Add at least 4 cookies to continue.
       </div>
 
-      <div class="stripe-note">🔒 <span>Secured by Stripe</span></div>
+      <div class="stripe-note">🔒 <span>Secured by Square</span></div>
     </div>
   </div>
 </div>
@@ -820,28 +820,15 @@
         </div>
       </div>
       <div class="stripe-badge">
-        🔒 <strong>Secured by Stripe</strong> · Card details encrypted, never stored
+        🔒 <strong>Secured by Square</strong> · You'll be redirected to complete payment
       </div>
-      <div class="form-group">
-        <label>Card Number</label>
-        <input type="text" id="cardNum" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Expiry</label>
-          <input type="text" id="cardExp" placeholder="MM / YY" maxlength="7" oninput="formatExp(this)">
-        </div>
-        <div class="form-group">
-          <label>CVC</label>
-          <input type="text" id="cardCvc" placeholder="123" maxlength="3">
-        </div>
-      </div>
-      <button class="place-order-btn" onclick="placeOrder()">Place Order & Pay</button>
+      <button class="place-order-btn" onclick="placeOrder()">Continue to Payment</button>
     </div>
     <div class="success-screen" id="successScreen">
       <div class="success-icon">🍪</div>
       <h2>Order Confirmed.</h2>
-      <p>Thank you. Your cookies are already on our mind.</p>
+      <p>Your total is <strong id="successAmount" style="color: var(--accent);">$0.00</strong></p>
+      <p style="margin-top: 8px;">Redirecting you to Square to complete payment — please enter this amount when prompted.</p>
       <div class="success-order-num" id="orderNum"></div>
       <p>A confirmation will be sent to your email.<br>We'll see you at pickup.</p>
       <button class="done-btn" onclick="finishOrder()">Back to the Edit</button>
@@ -1339,14 +1326,40 @@ function placeOrder() {
     if (!validatePickupDate(dateInput)) { alert('Pickup is available Tuesday–Saturday only. Please choose a different date.'); return; }
   }
 
-  // Stripe integration: replace this URL with your actual Stripe Payment Link
-  // window.location.href = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
-
-  // For now, show success screen
+  // Square Checkout integration
   const orderNum = `TCE-${Date.now().toString().slice(-6)}`;
+  const grandTotal = totalPrice().toFixed(2);
+
+  // Build a summary string for the Square payment note (shown in Square dashboard)
+  let orderSummary = `Order ${orderNum} — `;
+  Object.values(cart).forEach(item => {
+    if (item.type === 'individual') orderSummary += `${item.name} x${item.qty}, `;
+    else orderSummary += `${item.name}, `;
+  });
+  if (fulfillmentMode === 'delivery') {
+    orderSummary += `DELIVERY to ${document.getElementById('deliveryStreet').value} on ${document.getElementById('deliveryDate').value} at ${document.getElementById('deliveryTime').value}`;
+  } else {
+    orderSummary += `PICKUP on ${document.getElementById('pickupDate').value} at ${document.getElementById('pickupTime').value}`;
+  }
+
+  // Save order details locally so we can show them on return (optional, for your records)
+  console.log('Order placed:', { orderNum, name, email, phone, total: grandTotal, summary: orderSummary, fulfillmentMode });
+
+  // Square "Any amount" checkout links require the customer to manually enter
+  // the amount on Square's page — there's no way to pre-fill it via URL.
+  // We show the exact total clearly so they know what to enter.
+  const squareLink = 'https://square.link/u/RDC8TMx4';
+
   document.getElementById('orderNum').textContent = `Order #${orderNum}`;
+  document.getElementById('successAmount').textContent = `$${grandTotal}`;
   document.getElementById('checkoutBody').style.display = 'none';
   document.getElementById('successScreen').classList.add('show');
+
+  // Redirect to Square after giving the customer time to read their total
+  setTimeout(() => {
+    window.location.href = squareLink;
+  }, 4000);
+  return;
 }
 
 function finishOrder() {
@@ -1380,17 +1393,6 @@ function finishOrder() {
   const dTime = document.getElementById('deliveryTime'); if(dTime) dTime.value = '';
   const dAck = document.getElementById('deliveryAck'); if(dAck) dAck.checked = false;
   setFulfillment('pickup');
-}
-
-// ── FORMAT HELPERS ───────────────────────────────────────────
-function formatCard(el) {
-  let v = el.value.replace(/\D/g, '').slice(0, 16);
-  el.value = v.replace(/(.{4})/g, '$1 ').trim();
-}
-function formatExp(el) {
-  let v = el.value.replace(/\D/g, '').slice(0, 4);
-  if (v.length >= 2) v = v.slice(0,2) + ' / ' + v.slice(2);
-  el.value = v;
 }
 
 function flashBtn(btn) {
