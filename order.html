@@ -707,7 +707,7 @@
         Add at least 4 cookies to continue.
       </div>
 
-      <div class="stripe-note">🔒 <span>Secured by Square</span></div>
+      <div class="stripe-note">🔒 <span>Secured by Stripe</span></div>
     </div>
   </div>
 </div>
@@ -716,7 +716,7 @@
 <footer>
   <div class="footer-logo">The Cookie <span>Edit</span></div>
   <div class="footer-info">
-    Byron Center, MI · Pickup only<br>
+    Byron Center, MI · Pickup &amp; Delivery<br>
     <a href="mailto:orders@thecookieedit.com">orders@thecookieedit.com</a>
   </div>
   <div class="footer-social">
@@ -749,89 +749,35 @@
           <span id="modalTotal">$0.00</span>
         </div>
       </div>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="custName" placeholder="Your name">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="custEmail" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="tel" id="custPhone" placeholder="(616) 555-0100">
-      </div>
+
       <!-- PICKUP / DELIVERY TOGGLE -->
       <div class="fulfillment-toggle">
         <button class="toggle-btn active" id="pickupToggle" onclick="setFulfillment('pickup')">🏠 Pickup</button>
         <button class="toggle-btn" id="deliveryToggle" onclick="setFulfillment('delivery')">🚗 Free Delivery</button>
       </div>
 
-      <!-- PICKUP FIELDS -->
+      <!-- PICKUP INFO -->
       <div class="pickup-fields" id="pickupFields">
-        <div class="form-group">
-          <label>Preferred Pickup Date (min. 48 hrs notice, Tue–Sat)</label>
-          <input type="date" id="pickupDate" onchange="validatePickupDate(this)">
-          <div class="pickup-date-warn" id="pickupDateWarn">Pickup is available Tuesday–Saturday only. Please choose a different date.</div>
-        </div>
-        <div class="form-group">
-          <label>Pickup Time</label>
-          <select id="pickupTime">
-            <option value="">— Select a time —</option>
-          </select>
+        <div class="delivery-note">
+          <strong>Pickup available Tuesday–Saturday, 10AM–4PM</strong><br>
+          48 hours notice required. You'll select your pickup day and time on the next screen.<br>
+          📍 2323 Vansingel Lake Drive, Byron Center
         </div>
       </div>
 
-      <!-- DELIVERY FIELDS -->
+      <!-- DELIVERY INFO -->
       <div class="delivery-fields" id="deliveryFields">
         <div class="delivery-note">
           <strong>Free Saturday delivery</strong> within Byron Center (49315) only.<br>
-          You must be present to receive your order — cookies will not be left unattended.
-        </div>
-        <div class="form-group">
-          <label>Street Address</label>
-          <input type="text" id="deliveryStreet" placeholder="123 Main St">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>City</label>
-            <input type="text" id="deliveryCity" placeholder="Byron Center" value="Byron Center">
-          </div>
-          <div class="form-group">
-            <label>Zip Code</label>
-            <input type="text" id="deliveryZip" placeholder="49315" maxlength="5" oninput="validateZip(this)">
-            <div class="zip-warn" id="zipWarn">Delivery is available in Byron Center (49315) only.</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Delivery Date (Saturdays only, min. 48 hrs notice)</label>
-          <input type="date" id="deliveryDate" onchange="validateDeliveryDate(this)">
-          <div class="pickup-date-warn" id="deliveryDateWarn">Delivery is available on Saturdays only.</div>
-        </div>
-        <div class="form-group">
-          <label>Delivery Time</label>
-          <select id="deliveryTime">
-            <option value="">— Select a time —</option>
-          </select>
-        </div>
-        <div class="checkbox-group">
-          <input type="checkbox" id="deliveryAck">
-          <label for="deliveryAck">I understand I must be present to receive my order. Cookies will not be left unattended.</label>
+          Delivery windows available 10AM–4PM. You must be present to receive your order.<br>
+          You'll enter your delivery address and time slot on the next screen.
         </div>
       </div>
+
       <div class="stripe-badge">
-        🔒 <strong>Secured by Square</strong> · You'll be redirected to complete payment
+        🔒 <strong>Secured by Stripe</strong> · You'll complete your order on the next screen
       </div>
       <button class="place-order-btn" onclick="placeOrder()">Continue to Payment</button>
-    </div>
-    <div class="success-screen" id="successScreen">
-      <div class="success-icon">🍪</div>
-      <h2>Order Confirmed.</h2>
-      <p>Your total is <strong id="successAmount" style="color: var(--accent);">$0.00</strong></p>
-      <p style="margin-top: 8px;">Redirecting you to Square to complete payment — please enter this amount when prompted.</p>
-      <div class="success-order-num" id="orderNum"></div>
-      <p>A confirmation will be sent to your email.<br>We'll see you at pickup.</p>
-      <button class="done-btn" onclick="finishOrder()">Back to the Edit</button>
     </div>
   </div>
 </div>
@@ -868,39 +814,7 @@ function init() {
     ff.appendChild(chip);
   });
 
-  // Set min date for pickup (strict 48hrs from now) — also called in openCheckout
-  function setMinPickupDate() {
-    const now = new Date();
-    const minPickup = new Date(now.getTime() + 48 * 60 * 60 * 1000);
-    const y = minPickup.getFullYear();
-    const m = String(minPickup.getMonth() + 1).padStart(2, '0');
-    const d = String(minPickup.getDate()).padStart(2, '0');
-    const minStr = `${y}-${m}-${d}`;
-    const dateInput = document.getElementById('pickupDate');
-    if (dateInput) dateInput.min = minStr;
-    const delivDate = document.getElementById('deliveryDate');
-    if (delivDate) delivDate.min = minStr;
-  }
-  setMinPickupDate();
 
-  // Populate pickup + delivery time slots
-  function buildTimeSlots(selectId) {
-    const sel = document.getElementById(selectId);
-    if (!sel) return;
-    for (let h = 10; h < 18; h++) {
-      for (let m of [0, 30]) {
-        const hour12 = h > 12 ? h - 12 : h;
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        const label = `${hour12}:${m === 0 ? '00' : '30'} ${ampm}`;
-        const opt = document.createElement('option');
-        opt.value = label;
-        opt.textContent = label;
-        sel.appendChild(opt);
-      }
-    }
-  }
-  buildTimeSlots('pickupTime');
-  buildTimeSlots('deliveryTime');
 
   // Individual rows
   const indivContainer = document.getElementById('individualRows');
@@ -1212,9 +1126,7 @@ function openCheckout() {
 
   document.getElementById('modalTotal').textContent = `$${totalPrice().toFixed(2)}`;
   document.getElementById('checkoutModal').classList.add('open');
-  document.getElementById('successScreen').classList.remove('show');
   document.getElementById('checkoutBody').style.display = 'block';
-  setMinPickupDate(); // refresh min date each time modal opens
 }
 
 function closeCheckout() {
@@ -1234,132 +1146,14 @@ function setFulfillment(mode) {
   document.getElementById('deliveryFields').classList.toggle('show', mode === 'delivery');
 }
 
-function validateZip(input) {
-  const warn = document.getElementById('zipWarn');
-  const isValid = input.value === '49315';
-  warn.classList.toggle('show', input.value.length === 5 && !isValid);
-}
 
-function validateDeliveryDate(input) {
-  const warn = document.getElementById('deliveryDateWarn');
-  if (!input.value) { warn.classList.remove('show'); return true; }
-  const [y, mo, d] = input.value.split('-').map(Number);
-  const chosen = new Date(y, mo - 1, d);
-  const day = chosen.getDay(); // 6 = Saturday
-  const isSaturday = day === 6;
-  const minPickup = new Date(Date.now() + 48 * 60 * 60 * 1000);
-  const minDate = new Date(minPickup.getFullYear(), minPickup.getMonth(), minPickup.getDate());
-  const isFarEnough = chosen >= minDate;
-  if (!isSaturday) {
-    warn.textContent = 'Delivery is available on Saturdays only.';
-    warn.classList.add('show');
-    return false;
-  }
-  if (!isFarEnough) {
-    warn.textContent = 'We need at least 48 hours notice. Please choose a later date.';
-    warn.classList.add('show');
-    return false;
-  }
-  warn.classList.remove('show');
-  return true;
-}
 
-function validatePickupDate(input) {
-  const warn = document.getElementById('pickupDateWarn');
-  if (!input.value) { warn.classList.remove('show'); return true; }
 
-  const [y, mo, d] = input.value.split('-').map(Number);
-  const chosen = new Date(y, mo - 1, d);
-  const day = chosen.getDay(); // 0=Sun, 1=Mon, 2=Tue ... 6=Sat
-
-  // Check Tue-Sat
-  const isValidDay = day >= 2 && day <= 6;
-  // Check 48hr minimum
-  const minPickup = new Date(Date.now() + 48 * 60 * 60 * 1000);
-  const minDate = new Date(minPickup.getFullYear(), minPickup.getMonth(), minPickup.getDate());
-  const isFarEnough = chosen >= minDate;
-
-  if (!isValidDay) {
-    warn.textContent = 'Pickup is available Tuesday–Saturday only. Please choose a different date.';
-    warn.classList.add('show');
-    input.setCustomValidity('Pickup is Tue–Sat only');
-    return false;
-  }
-  if (!isFarEnough) {
-    warn.textContent = 'We need at least 48 hours notice. Please choose a later date.';
-    warn.classList.add('show');
-    input.setCustomValidity('Need 48hrs notice');
-    return false;
-  }
-  warn.classList.remove('show');
-  input.setCustomValidity('');
-  return true;
-}
 
 function placeOrder() {
-  const name = document.getElementById('custName').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-  const phone = document.getElementById('custPhone').value.trim();
-
-  if (!name || !email || !phone) {
-    alert('Please fill in your name, email and phone number.');
-    return;
-  }
-
-  if (fulfillmentMode === 'delivery') {
-    const street = document.getElementById('deliveryStreet').value.trim();
-    const zip = document.getElementById('deliveryZip').value.trim();
-    const deliveryDate = document.getElementById('deliveryDate');
-    const deliveryTime = document.getElementById('deliveryTime').value;
-    const ack = document.getElementById('deliveryAck').checked;
-
-    if (!street || !zip) { alert('Please enter your delivery address.'); return; }
-    if (zip !== '49315') { alert('Delivery is available in Byron Center (49315) only.'); return; }
-    if (!deliveryDate.value || !deliveryTime) { alert('Please select a delivery date and time.'); return; }
-    if (!validateDeliveryDate(deliveryDate)) { alert('Delivery is available on Saturdays only, with 48 hours notice.'); return; }
-    if (!ack) { alert('Please confirm you will be present to receive your order.'); return; }
-  } else {
-    const dateInput = document.getElementById('pickupDate');
-    const date = dateInput.value;
-    const time = document.getElementById('pickupTime').value;
-    if (!date || !time) { alert('Please fill in all pickup details, including a time.'); return; }
-    if (!validatePickupDate(dateInput)) { alert('Pickup is available Tuesday–Saturday only. Please choose a different date.'); return; }
-  }
-
-  // Square Checkout integration
-  const orderNum = `TCE-${Date.now().toString().slice(-6)}`;
-  const grandTotal = totalPrice().toFixed(2);
-
-  // Build a summary string for the Square payment note (shown in Square dashboard)
-  let orderSummary = `Order ${orderNum} — `;
-  Object.values(cart).forEach(item => {
-    if (item.type === 'individual') orderSummary += `${item.name} x${item.qty}, `;
-    else orderSummary += `${item.name}, `;
-  });
-  if (fulfillmentMode === 'delivery') {
-    orderSummary += `DELIVERY to ${document.getElementById('deliveryStreet').value} on ${document.getElementById('deliveryDate').value} at ${document.getElementById('deliveryTime').value}`;
-  } else {
-    orderSummary += `PICKUP on ${document.getElementById('pickupDate').value} at ${document.getElementById('pickupTime').value}`;
-  }
-
-  // Save order details locally so we can show them on return (optional, for your records)
-  console.log('Order placed:', { orderNum, name, email, phone, total: grandTotal, summary: orderSummary, fulfillmentMode });
-
-  // Square "Any amount" checkout links require the customer to manually enter
-  // the amount on Square's page — there's no way to pre-fill it via URL.
-  // We show the exact total clearly so they know what to enter.
-  const squareLink = 'https://square.link/u/RDC8TMx4';
-
-  document.getElementById('orderNum').textContent = `Order #${orderNum}`;
-  document.getElementById('successAmount').textContent = `$${grandTotal}`;
-  document.getElementById('checkoutBody').style.display = 'none';
-  document.getElementById('successScreen').classList.add('show');
-
-  // Redirect to Square after giving the customer time to read their total
-  setTimeout(() => {
-    window.location.href = squareLink;
-  }, 4000);
-  return;
+  const PICKUP_LINK  = 'https://buy.stripe.com/test_14A9AVboP4A92ABe5W4wM00';
+  const DELIVERY_LINK = 'https://buy.stripe.com/test_5kQ14p1Of7Ml1wx0f64wM01';
+  window.location.href = fulfillmentMode === 'delivery' ? DELIVERY_LINK : PICKUP_LINK;
 }
 
 function finishOrder() {
@@ -1380,18 +1174,6 @@ function finishOrder() {
   });
   document.getElementById('flightBtn').textContent = 'Add to Order';
   document.getElementById('flightBtn').classList.remove('added');
-  // Reset form fields
-  document.getElementById('custName').value = '';
-  document.getElementById('custEmail').value = '';
-  document.getElementById('custPhone').value = '';
-  document.getElementById('pickupDate').value = '';
-  document.getElementById('pickupTime').value = '';
-  document.getElementById('pickupDateWarn').classList.remove('show');
-  // Reset delivery fields
-  const dFields = ['deliveryStreet','deliveryCity','deliveryDate','deliveryZip'];
-  dFields.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-  const dTime = document.getElementById('deliveryTime'); if(dTime) dTime.value = '';
-  const dAck = document.getElementById('deliveryAck'); if(dAck) dAck.checked = false;
   setFulfillment('pickup');
 }
 
