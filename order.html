@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Order — The Cookie Edit</title>
 <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="favicon.png"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #0A0A0A;
@@ -51,21 +52,6 @@
     color: var(--light-grey); text-decoration: none; transition: color 0.2s;
   }
   .nav-link:hover { color: var(--accent); }
-  .nav-cart {
-    background: transparent; border: 1px solid var(--accent); color: var(--accent);
-    padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
-    font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; display: flex; align-items: center; gap: 10px;
-    transition: background 0.25s, color 0.25s;
-  }
-  .nav-cart:hover { background: var(--accent); color: var(--black); }
-  .cart-badge {
-    background: var(--accent); color: var(--black); border-radius: 50%;
-    width: 18px; height: 18px; font-size: 0.65rem; font-weight: 500;
-    display: inline-flex; align-items: center; justify-content: center;
-    transition: background 0.25s;
-  }
-  .nav-cart:hover .cart-badge { background: var(--black); color: var(--accent); }
 
   /* ── PAGE HEADER ── */
   .page-header {
@@ -76,7 +62,7 @@
       radial-gradient(ellipse at 10% 90%, rgba(200,169,126,0.04) 0%, transparent 50%);
   }
   .page-header-inner {
-    max-width: 1300px; margin: 0 auto;
+    max-width: 900px; margin: 0 auto;
     display: flex; justify-content: space-between; align-items: flex-end;
   }
   .page-eyebrow {
@@ -97,14 +83,9 @@
 
   /* ── MAIN LAYOUT ── */
   .order-layout {
-    max-width: 1300px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 380px; gap: 0;
-    align-items: start; padding: 0 48px 80px;
-    position: relative;
+    max-width: 900px; margin: 0 auto;
+    padding: 56px 48px 40px;
   }
-
-  /* ── LEFT: MENU ── */
-  .menu-col { padding-right: 64px; padding-top: 56px; }
 
   /* Section labels */
   .menu-section-label {
@@ -167,31 +148,13 @@
     font-size: 2rem; font-weight: 300; color: var(--accent);
   }
   .flight-price-sub { font-size: 0.7rem; color: var(--grey); letter-spacing: 0.05em; }
-  .add-flight-btn {
-    background: var(--accent); color: var(--black); border: none;
-    padding: 13px 32px; font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em;
-    text-transform: uppercase; cursor: pointer; transition: background 0.25s;
-  }
-  .add-flight-btn:hover { background: var(--white); }
-  .add-flight-btn.added {
-    background: transparent; border: 1px solid var(--accent); color: var(--accent);
-  }
 
   /* ── INDIVIDUAL COOKIE ROW ── */
   .cookie-row {
     background: var(--card-bg); padding: 24px;
-    display: flex; flex-direction: column;
-    gap: 0; margin-bottom: 2px;
+    display: flex; gap: 20px; align-items: center;
+    margin-bottom: 2px;
     transition: background 0.25s; border: 1px solid transparent;
-  }
-  .cookie-row-top {
-    display: flex; gap: 20px; align-items: flex-start;
-  }
-  .cookie-row-bottom {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 16px; padding-top: 14px;
-    border-top: 1px solid rgba(255,255,255,0.05);
   }
   .cookie-row:hover { background: #181818; border-color: rgba(200,169,126,0.1); }
   .cookie-emoji-box {
@@ -200,7 +163,7 @@
     display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
     flex-shrink: 0;
   }
-  .cookie-row-info { min-width: 0; }
+  .cookie-row-info { flex: 1; min-width: 0; }
   .cookie-row-num {
     font-size: 0.62rem; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 4px;
   }
@@ -212,291 +175,71 @@
   .cookie-row-desc {
     font-size: 0.78rem; color: var(--grey); line-height: 1.6;
   }
-  .cookie-row-controls { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; flex-shrink: 0; }
   .cookie-price-tag {
-    font-size: 0.7rem; color: var(--grey); letter-spacing: 0.05em; text-align: right;
+    font-size: 0.7rem; color: var(--grey); letter-spacing: 0.05em;
+    white-space: nowrap; flex-shrink: 0;
   }
-  .qty-stepper {
-    display: flex; align-items: center; gap: 0;
-    border: 1px solid rgba(200,169,126,0.25);
-  }
-  .stepper-btn {
-    width: 36px; height: 36px; background: none; border: none;
-    color: var(--accent); font-size: 1.1rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s, color 0.2s;
-  }
-  .stepper-btn:hover { background: var(--accent); color: var(--black); }
-  .stepper-val {
-    width: 40px; text-align: center; font-size: 0.9rem; font-weight: 400;
-    color: var(--white); background: rgba(255,255,255,0.03);
-    padding: 8px 0; border-left: 1px solid rgba(200,169,126,0.2); border-right: 1px solid rgba(200,169,126,0.2);
-  }
-  .cookie-row-subtotal {
-    font-size: 0.8rem; color: var(--accent); min-width: 48px; text-align: right;
-    font-weight: 400;
-  }
-
-  /* ── MIN ORDER NOTICE ── */
-  .min-notice {
-    font-size: 0.72rem; color: var(--grey); letter-spacing: 0.05em;
-    padding: 16px 20px; border: 1px solid rgba(200,169,126,0.12);
-    background: rgba(200,169,126,0.04); margin-bottom: 2px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .min-notice-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-  .min-notice.warn { border-color: rgba(200,100,100,0.3); background: rgba(200,100,100,0.05); color: #e08080; }
-  .min-notice.warn .min-notice-dot { background: #e08080; }
-
-  /* ── RIGHT: ORDER SUMMARY ── */
-  .summary-col {
-    position: sticky; top: 80px;
-    padding-top: 56px;
-    border-left: 1px solid rgba(255,255,255,0.06);
-    padding-left: 48px;
-    min-height: calc(100vh - 80px);
-  }
-  .summary-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    padding: 32px;
-  }
-  .summary-heading {
-    font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 28px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .summary-heading::after { content: ''; flex: 1; height: 1px; background: rgba(200,169,126,0.2); }
-  .summary-empty {
+  .cookie-price-highlight {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem; font-style: italic; color: var(--grey);
-    text-align: center; padding: 32px 0; line-height: 1.8;
+    font-size: 1.5rem; font-weight: 300; color: var(--accent);
+    white-space: nowrap; flex-shrink: 0;
   }
-  .summary-items { display: flex; flex-direction: column; gap: 0; }
-  .summary-line {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-    gap: 12px;
-  }
-  .summary-line:last-child { border-bottom: none; }
-  .summary-line-name {
-    font-size: 0.82rem; color: var(--white); line-height: 1.4;
-  }
-  .summary-line-sub { font-size: 0.7rem; color: var(--grey); margin-top: 2px; }
-  .summary-line-price { font-size: 0.82rem; color: var(--accent); white-space: nowrap; font-weight: 400; }
-  .summary-remove {
-    background: none; border: none; color: #555; font-size: 0.8rem;
-    cursor: pointer; padding: 2px 4px; transition: color 0.2s;
-    margin-left: 4px;
-  }
-  .summary-remove:hover { color: #e08080; }
 
-  .summary-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 20px 0; }
-
-  .summary-subtotal {
-    display: flex; justify-content: space-between;
-    font-size: 0.82rem; color: var(--grey); margin-bottom: 8px;
+  /* ── ORDER CTA SECTION ── */
+  .order-cta {
+    margin-top: 56px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 48px;
   }
-  .summary-total-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: 8px;
+  .order-cta-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 300; margin-bottom: 8px;
   }
-  .summary-total-label {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; color: var(--white);
+  .order-cta-heading em { font-style: italic; color: var(--accent); }
+  .order-cta-sub {
+    font-size: 0.82rem; color: var(--grey); line-height: 1.8; margin-bottom: 36px;
   }
-  .summary-total-amt {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; color: var(--accent);
-  }
-  .summary-note { font-size: 0.68rem; color: var(--grey); line-height: 1.7; margin-bottom: 24px; }
-
-  .checkout-btn {
-    width: 100%; background: var(--accent); color: var(--black); border: none;
-    padding: 18px; font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
-    font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: background 0.25s;
-  }
-  .checkout-btn:hover:not(:disabled) { background: var(--white); }
-  .checkout-btn:disabled {
-    background: #222; color: #444; cursor: not-allowed;
-    border: 1px solid #2a2a2a;
-  }
-  .checkout-min-warn {
-    font-size: 0.68rem; color: #e08080; text-align: center;
-    margin-top: 12px; letter-spacing: 0.05em; display: none;
-  }
-  .checkout-min-warn.show { display: block; }
-
-  .stripe-note {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 0.68rem; color: var(--grey); margin-top: 16px;
-    justify-content: center; letter-spacing: 0.05em;
-  }
-  .stripe-note span { color: var(--accent); }
-
-
-  /* ── PICKUP / DELIVERY TOGGLE ── */
   .fulfillment-toggle {
-    display: flex; gap: 0; margin-bottom: 24px;
+    display: flex; gap: 0; margin-bottom: 20px;
     border: 1px solid rgba(200,169,126,0.25);
+    max-width: 480px;
   }
   .toggle-btn {
-    flex: 1; padding: 14px; background: none; border: none;
+    flex: 1; padding: 16px; background: none; border: none;
     font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
     font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--grey); cursor: pointer; transition: all 0.2s;
   }
-  .toggle-btn.active {
-    background: var(--accent); color: var(--black);
-  }
+  .toggle-btn.active { background: var(--accent); color: var(--black); }
   .toggle-btn:not(.active):hover { color: var(--accent); }
 
-  /* Delivery fields */
-  .delivery-fields { display: none; }
-  .delivery-fields.show { display: block; }
-  .pickup-fields { display: block; }
-  .pickup-fields.hide { display: none; }
-
-  .delivery-note {
-    font-size: 0.75rem; color: var(--grey); line-height: 1.8;
+  .fulfillment-note {
+    font-size: 0.78rem; color: var(--grey); line-height: 1.8;
     padding: 14px 16px; border: 1px solid rgba(200,169,126,0.15);
-    background: rgba(200,169,126,0.04); margin-bottom: 20px;
+    background: rgba(200,169,126,0.04); margin-bottom: 28px;
+    max-width: 480px;
   }
-  .delivery-note strong { color: var(--accent); font-weight: 400; }
+  .fulfillment-note strong { color: var(--accent); font-weight: 400; }
 
-  .zip-warn {
-    display: none; font-size: 0.7rem; color: #e08080;
-    margin-top: 8px; letter-spacing: 0.03em;
-  }
-  .zip-warn.show { display: block; }
-
-  /* Acknowledgement checkbox */
-  .checkbox-group {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 16px; border: 1px solid rgba(200,169,126,0.2);
-    background: rgba(200,169,126,0.04); margin-bottom: 20px;
-    cursor: pointer;
-  }
-  .checkbox-group input[type="checkbox"] {
-    width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px;
-    accent-color: var(--accent); cursor: pointer;
-  }
-  .checkbox-group label {
-    font-size: 0.8rem; color: var(--light-grey); line-height: 1.7; cursor: pointer;
-  }
-
-  /* ── CHECKOUT MODAL ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.88); z-index: 500;
-    align-items: center; justify-content: center;
-    backdrop-filter: blur(10px);
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: #111; border: 1px solid var(--border);
-    width: min(540px, 95vw); max-height: 92vh; overflow-y: auto;
-  }
-  .modal-header {
-    padding: 28px 36px; border-bottom: 1px solid rgba(255,255,255,0.06);
-    display: flex; justify-content: space-between; align-items: center;
-    position: sticky; top: 0; background: #111; z-index: 1;
-  }
-  .modal-header h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300;
-  }
-  .modal-close {
-    background: none; border: none; color: var(--grey); font-size: 1.1rem;
-    cursor: pointer; padding: 4px; transition: color 0.2s;
-  }
-  .modal-close:hover { color: var(--white); }
-  .modal-body { padding: 36px; }
-  .modal-order-summary {
-    background: rgba(200,169,126,0.05); border: 1px solid rgba(200,169,126,0.12);
-    padding: 20px 24px; margin-bottom: 32px;
-  }
-  .modal-order-summary h3 {
-    font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 16px;
-  }
-  .modal-summary-row {
-    display: flex; justify-content: space-between;
-    font-size: 0.85rem; color: var(--grey); padding: 4px 0;
-  }
-  .modal-summary-total {
-    font-size: 0.95rem; color: var(--white);
-    border-top: 1px solid rgba(200,169,126,0.2); margin-top: 10px; padding-top: 10px;
-    display: flex; justify-content: space-between; font-weight: 400;
-  }
-  .modal-summary-total span:last-child { color: var(--accent); }
-
-  .form-group { margin-bottom: 18px; }
-  .form-group label {
-    display: block; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 8px;
-  }
-  .form-group input, .form-group select {
-    width: 100%; padding: 13px 16px;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
-    color: var(--white); font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem; font-weight: 400; outline: none; transition: border-color 0.2s;
-  }
-  .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
-  .form-group input::placeholder { color: var(--grey); }
-  .form-group select { appearance: none; cursor: pointer; }
-  .form-group select option {
-    background: #1a1a1a; color: var(--white);
-    font-weight: 400; font-size: 0.9rem; padding: 8px;
-  }
-
-  /* Make date picker calendar icon visible */
-  input[type="date"] { cursor: pointer; }
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) sepia(1) saturate(2) hue-rotate(5deg) brightness(1.2);
-    cursor: pointer; opacity: 0.8; transform: scale(1.3);
-  }
-  input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
-  .pickup-date-warn {
-    display: none; font-size: 0.7rem; color: #e08080;
-    margin-top: 8px; letter-spacing: 0.03em;
-  }
-  .pickup-date-warn.show { display: block; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  .stripe-badge {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-    padding: 12px 16px; margin-bottom: 24px;
-    font-size: 0.75rem; color: var(--grey); letter-spacing: 0.04em;
-  }
-  .stripe-badge strong { color: var(--accent); font-weight: 400; }
-
-  .place-order-btn {
-    width: 100%; background: var(--accent); color: var(--black); border: none;
-    padding: 18px; font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
+  .order-now-btn {
+    display: block; max-width: 480px;
+    background: var(--accent); color: var(--black); border: none;
+    padding: 20px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem;
     font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: background 0.25s;
+    cursor: pointer; transition: background 0.25s; text-align: center;
+    text-decoration: none;
   }
-  .place-order-btn:hover { background: var(--white); }
+  .order-now-btn:hover { background: var(--white); }
 
-  /* Success */
-  .success-screen {
-    display: none; text-align: center; padding: 64px 36px;
+  .stripe-note {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.68rem; color: var(--grey); margin-top: 16px;
+    letter-spacing: 0.05em; max-width: 480px;
   }
-  .success-screen.show { display: block; }
-  .success-icon { font-size: 3.5rem; margin-bottom: 24px; }
-  .success-screen h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 2.2rem;
-    font-weight: 300; margin-bottom: 16px; color: var(--white);
-  }
-  .success-screen p { color: var(--grey); line-height: 1.8; font-size: 0.9rem; }
-  .success-order-num { color: var(--accent); font-size: 1rem; margin: 20px 0; letter-spacing: 0.1em; }
-  .done-btn {
-    margin-top: 28px; background: transparent; border: 1px solid var(--accent);
-    color: var(--accent); padding: 14px 40px; font-family: 'DM Sans', sans-serif;
-    font-size: 0.72rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.25s;
-  }
-  .done-btn:hover { background: var(--accent); color: var(--black); }
+  .stripe-note span { color: var(--accent); }
+
+
 
   /* ── FOOTER ── */
   footer {
@@ -534,78 +277,33 @@
     .page-header { padding: 120px 24px 48px; }
     .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
     .page-header-note { text-align: left; }
-    .order-layout { grid-template-columns: 1fr; padding: 0 24px 80px; }
-    .menu-col { padding-right: 0; }
-    .summary-col { position: relative; top: 0; border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 40px; }
+    .order-layout { padding: 40px 24px; }
     footer { padding: 32px 24px; flex-direction: column; text-align: center; }
     .footer-info, .footer-right { text-align: center; }
+    .pricing-strip { flex-direction: column; }
+    .pricing-tier { border-right: none; border-bottom: 1px solid rgba(200,169,126,0.1); }
+    .pricing-tier:last-child { border-bottom: none; }
   }
 
   @media (max-width: 640px) {
-    /* Nav */
     nav { padding: 14px 16px; gap: 8px; }
     .nav-logo { font-size: 0.9rem; letter-spacing: 0.12em; white-space: nowrap; }
     .nav-right { gap: 12px; }
-    .nav-link { display: none; } /* Hide text links on mobile — keep just the cart button */
-    .nav-cart { padding: 8px 14px; font-size: 0.65rem; letter-spacing: 0.1em; }
-
-    /* Page header */
+    .nav-link { display: none; }
     .page-header { padding: 90px 16px 36px; }
     .page-title { font-size: 2.4rem; }
-    .page-header-note { font-size: 0.75rem; }
-
-    /* Layout */
-    .order-layout { padding: 0 16px 60px; }
-    .menu-col { padding-top: 32px; }
-
-    /* Min notice */
-    .min-notice { font-size: 0.68rem; padding: 12px 14px; }
-
-    /* Flight card */
+    .order-layout { padding: 32px 16px; }
     .flight-card { flex-direction: column; gap: 20px; padding: 24px; }
     .flight-icon { width: 100%; height: 80px; font-size: 2rem; }
     .flight-footer { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .add-flight-btn { width: 100%; text-align: center; padding: 14px; }
-
-    /* Cookie & pack rows */
-    .cookie-row, .pack-row { padding: 16px; }
-    .cookie-emoji-box { width: 60px; height: 60px; flex-shrink: 0; }
+    .cookie-row { padding: 16px; }
+    .cookie-emoji-box { width: 60px; height: 60px; }
     .cookie-row-name { font-size: 1.1rem; }
-    .cookie-row-desc { font-size: 0.75rem; }
-    .stepper-btn { width: 44px; height: 44px; font-size: 1.3rem; }
-    .stepper-val { width: 48px; padding: 10px 0; font-size: 1rem; }
-    .cookie-price-tag { font-size: 0.7rem; }
-    .cookie-row-subtotal { font-size: 0.85rem; }
-    .pack-dropdown { flex: 1; font-size: 0.75rem; padding: 10px 32px 10px 12px; }
-    .pack-add-btn { white-space: nowrap; padding: 10px 14px; font-size: 0.65rem; }
-
-    /* Summary */
-    .summary-card { padding: 24px 20px; }
-    .checkout-btn { padding: 16px; font-size: 0.72rem; }
-
-    /* Modal */
-    .modal { width: 100vw; max-height: 100vh; border-radius: 0; }
-    .modal-header { padding: 20px 24px; }
-    .modal-body { padding: 24px; }
-    .form-row { grid-template-columns: 1fr; }
-
-    /* Footer */
+    .fulfillment-toggle, .fulfillment-note, .order-now-btn, .stripe-note { max-width: 100%; }
     footer { padding: 28px 16px; align-items: flex-start; gap: 16px; }
     .footer-social { margin: 0 auto; }
     .footer-info, .footer-right { text-align: left; }
   }
-
-  /* ── ADD BUTTON / STEPPER TOGGLE ── */
-  .add-cookie-btn {
-    background: transparent; border: 1px solid var(--accent); color: var(--accent);
-    padding: 10px 24px; font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
-    font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s; white-space: nowrap;
-  }
-  .add-cookie-btn:hover { background: var(--accent); color: var(--black); }
-  .stepper-wrap { display: none; align-items: center; gap: 0; }
-  .stepper-wrap.visible { display: flex; }
-  .cookie-row-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.05); }
 </style>
 </head>
 <body>
@@ -619,9 +317,6 @@
     <a href="faq.html" class="nav-link">FAQ</a>
     <a href="about.html" class="nav-link">About</a>
     <a href="mailto:orders@thecookieedit.com" class="nav-link">Contact</a>
-    <button class="nav-cart" onclick="openCheckout()">
-      Order <span class="cart-badge" id="cartBadge">0</span>
-    </button>
   </div>
 </nav>
 
@@ -630,86 +325,82 @@
   <div class="page-header-inner">
     <div>
       <div class="page-eyebrow">Byron Center, MI · Made to Order</div>
-      <h1 class="page-title">Build Your <em>Edit</em></h1>
+      <h1 class="page-title">The <em>Menu</em></h1>
     </div>
     <div class="page-header-note">
-      <strong>Minimum order: 4 cookies</strong><br>
-      Mix & match flavors freely.<br>
-      48 hr notice · Pickup only.
+      <strong>48 hr notice required</strong><br>
+      Pickup Tue–Sat · Free Saturday delivery<br>
+      within Byron Center (49315)
     </div>
   </div>
 </div>
 
 <!-- MAIN -->
-<div class="order-layout">
+<div class="order-layout fade-up">
 
-  <!-- LEFT COLUMN -->
-  <div class="menu-col fade-up">
-
-    <!-- MIN ORDER NOTICE -->
-    <div class="min-notice" id="minNotice">
-      <div class="min-notice-dot"></div>
-      Minimum order is 4 cookies. Mix and match any flavors.
-    </div>
-
-    <!-- COOKIE FLIGHT -->
-    <div class="menu-section-label">The Starter Box</div>
-    <div class="flight-card">
-      <div class="flight-icon"><img src="images/starter-pack.png" style="width:100%;height:100%;object-fit:contain;" alt="The Starter Box"></div>
-      <div class="flight-info">
-        <div class="flight-tag">Curated · 3 Cookies</div>
-        <div class="flight-name">The Starter Box</div>
-        <div class="flight-desc">A curated trio of fan favorites — Classic Chocolate Chip, M&amp;M, and Triple Chocolate. The perfect introduction to The Cookie Edit, packed by us.</div>
-        <div class="flight-flavors" id="flightFlavors"></div>
-        <div class="flight-footer">
-          <div>
-            <div class="flight-price">$10</div>
-            <div class="flight-price-sub">3 cookies · curated flavors</div>
-          </div>
-          <button class="add-flight-btn" id="flightBtn" onclick="addFlight()">Add to Order</button>
+  <!-- STARTER BOX -->
+  <div class="menu-section-label">The Starter Box</div>
+  <div class="flight-card">
+    <div class="flight-icon"><img src="images/starter-pack.png" style="width:100%;height:100%;object-fit:contain;" alt="The Starter Box"></div>
+    <div class="flight-info">
+      <div class="flight-tag">Curated · 3 Cookies</div>
+      <div class="flight-name">The Starter Box</div>
+      <div class="flight-desc">A curated trio of fan favorites — Classic Chocolate Chip, M&amp;M, and Triple Chocolate. The perfect introduction to The Cookie Edit, packed by us.</div>
+      <div class="flight-flavors" id="flightFlavors"></div>
+      <div class="flight-footer">
+        <div>
+          <div class="flight-price">$10</div>
+          <div class="flight-price-sub">3 cookies · curated flavors</div>
         </div>
       </div>
     </div>
-
-    <!-- INDIVIDUAL COOKIES -->
-    <div class="menu-section-label">Build Your Box — Mix &amp; Match</div>
-    <div id="individualRows"></div>
-
-    <!-- PACKS -->
-    
-
   </div>
 
-  <!-- RIGHT COLUMN: SUMMARY -->
-  <div class="summary-col">
-    <div class="summary-card">
-      <div class="summary-heading">Your Order</div>
-
-      <div class="summary-empty" id="summaryEmpty">
-        Nothing here yet.<br>Add something delicious.
-      </div>
-
-      <div class="summary-items" id="summaryItems" style="display:none;"></div>
-
-      <div id="summaryFooter" style="display:none;">
-        <div class="summary-divider"></div>
-        <div class="summary-total-row">
-          <div class="summary-total-label">Total</div>
-          <div class="summary-total-amt" id="summaryTotal">$0.00</div>
+  <!-- DOZEN BOX -->
+  <div class="menu-section-label">The Dozen Box</div>
+  <div class="flight-card">
+    <div class="flight-icon">
+      <img src="images/dozen-box.png" style="width:100%;height:100%;object-fit:contain;" alt="The Dozen Box" onerror="this.parentNode.innerHTML='🍪'">
+    </div>
+    <div class="flight-info">
+      <div class="flight-tag">Your Choice · 12 Cookies</div>
+      <div class="flight-name">The Dozen Box</div>
+      <div class="flight-desc">A full dozen, your way. Mix and match any flavors from our menu — just tell us what you want in the notes field on the next screen.</div>
+      <div class="flight-footer">
+        <div>
+          <div class="flight-price">$39</div>
+          <div class="flight-price-sub">12 cookies · your choice of flavors</div>
         </div>
-        <div class="summary-note" id="summaryCountNote"></div>
       </div>
-
-      <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>
-        Proceed to Checkout
-      </button>
-      <div class="checkout-min-warn" id="checkoutWarn">
-        Add at least 4 cookies to continue.
-      </div>
-
-      <div class="stripe-note">🔒 <span>Secured by Stripe</span></div>
     </div>
   </div>
+
+  <!-- INDIVIDUAL COOKIES -->
+  <div class="menu-section-label">Individual Cookies · $4 each</div>
+  <div id="individualRows"></div>
+
+
+
+  <!-- ORDER CTA -->
+  <div class="order-cta">
+    <h2 class="order-cta-heading">Ready to <em>Order?</em></h2>
+    <p class="order-cta-sub">Select pickup or delivery below, then choose your cookies and complete your order on the next screen.</p>
+
+    <div class="fulfillment-toggle">
+      <button class="toggle-btn active" id="pickupToggle" onclick="setFulfillment('pickup')">🏠 Pickup</button>
+      <button class="toggle-btn" id="deliveryToggle" onclick="setFulfillment('delivery')">🚗 Free Delivery</button>
+    </div>
+
+    <div class="fulfillment-note" id="fulfillmentNote">
+      <strong>Pickup available Tuesday–Saturday, 10AM–4PM</strong><br>
+      48 hours notice required. You'll select your pickup day and time on the next screen.
+    </div>
+
+    <button class="order-now-btn" onclick="placeOrder()">Order Now →</button>
+
+    <div class="stripe-note">🔒 <span>Secured by Stripe</span> · You'll complete your order on the next screen</div>
+  </div>
+
 </div>
 
 <!-- FOOTER -->
@@ -733,78 +424,19 @@
   <div class="footer-right">© 2026 The Cookie Edit<br>All rights reserved</div>
 </footer>
 
-<!-- CHECKOUT MODAL -->
-<div class="modal-overlay" id="checkoutModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>Complete Your Order</h2>
-      <button class="modal-close" onclick="closeCheckout()">✕</button>
-    </div>
-    <div class="modal-body" id="checkoutBody">
-      <div class="modal-order-summary">
-        <h3>Order Summary</h3>
-        <div id="modalSummaryItems"></div>
-        <div class="modal-summary-total">
-          <span>Total</span>
-          <span id="modalTotal">$0.00</span>
-        </div>
-      </div>
-
-      <!-- PICKUP / DELIVERY TOGGLE -->
-      <div class="fulfillment-toggle">
-        <button class="toggle-btn active" id="pickupToggle" onclick="setFulfillment('pickup')">🏠 Pickup</button>
-        <button class="toggle-btn" id="deliveryToggle" onclick="setFulfillment('delivery')">🚗 Free Delivery</button>
-      </div>
-
-      <!-- PICKUP INFO -->
-      <div class="pickup-fields" id="pickupFields">
-        <div class="delivery-note">
-          <strong>Pickup available Tuesday–Saturday, 10AM–4PM</strong><br>
-          48 hours notice required. You'll select your pickup day and time on the next screen.<br>
-          📍 2323 Vansingel Lake Drive, Byron Center
-        </div>
-      </div>
-
-      <!-- DELIVERY INFO -->
-      <div class="delivery-fields" id="deliveryFields">
-        <div class="delivery-note">
-          <strong>Free Saturday delivery</strong> within Byron Center (49315) only.<br>
-          Delivery windows available 10AM–4PM. You must be present to receive your order.<br>
-          You'll enter your delivery address and time slot on the next screen.
-        </div>
-      </div>
-
-      <div class="stripe-badge">
-        🔒 <strong>Secured by Stripe</strong> · You'll complete your order on the next screen
-      </div>
-      <button class="place-order-btn" onclick="placeOrder()">Continue to Payment</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ── DATA ────────────────────────────────────────────────────
 const COOKIES = [
-  { id: 'cc',  name: 'Classic Chocolate Chip',  emoji: '🍪', photo: 'images/chocolate-chip.png', desc: 'Golden edges, gooey center, loaded with premium chocolate chips.' },
-  { id: 'mm',  name: 'M&M',                      emoji: '🌈', photo: 'images/mm.png', desc: 'A colorful twist on the classic. Bright M&Ms baked into every bite.' },
-  { id: 'rv',  name: 'Red Velvet',               emoji: '❤️', photo: 'images/red-velvet.png', desc: 'Rich red velvet cocoa dough packed with cream cheese chips and finished with a white chocolate drizzle.' },
-  { id: 'tc',  name: 'Triple Chocolate',          emoji: '🍫', photo: 'images/triple-chocolate.png', desc: 'Cocoa dough packed with chocolate chips and white chocolate chips. Three layers of chocolate in every bite.' },
-  { id: 'bbc', name: 'Salted Caramel',       emoji: '🧂', photo: 'images/salted-caramel.png', desc: 'White chocolate chips, caramel syrup, crushed pretzels, and toffee bits. Sweet, salty, and completely irresistible.' },
-  { id: 'cc2', name: 'Cookies & Cream',           emoji: '🖤', photo: 'images/cookies-and-cream.png', desc: 'Chocolate dough, crushed Oreos, and white chocolate chips.' },
+  { id: 'cc',  name: 'Classic Chocolate Chip', emoji: '🍪', photo: 'images/chocolate-chip.png', desc: 'Golden edges, gooey center, loaded with premium chocolate chips.' },
+  { id: 'mm',  name: 'M&M',                    emoji: '🌈', photo: 'images/mm.png',             desc: 'A colorful twist on the classic. Bright M&Ms baked into every bite.' },
+  { id: 'rv',  name: 'Red Velvet',              emoji: '❤️', photo: 'images/red-velvet.png',     desc: 'Rich red velvet cocoa dough packed with cream cheese chips and finished with a white chocolate drizzle.' },
+  { id: 'tc',  name: 'Triple Chocolate',        emoji: '🍫', photo: 'images/triple-chocolate.png', desc: 'Cocoa dough packed with chocolate chips and white chocolate chips. Three layers of chocolate in every bite.' },
+  { id: 'bbc', name: 'Salted Caramel',          emoji: '🧂', photo: 'images/salted-caramel.png', desc: 'White chocolate chips, caramel syrup, crushed pretzels, and toffee bits. Sweet, salty, and completely irresistible.' },
+  { id: 'cc2', name: 'Cookies & Cream',         emoji: '🖤', photo: 'images/cookies-and-cream.png', desc: 'Chocolate dough, crushed Oreos, and white chocolate chips.' },
 ];
 
-const BOX_PRICES = { 4: 14, 6: 20, 12: 35 }; // tiers: 4-5=$14, 6-11=$20, 12+=$35
-const INDIV_PRICE = 4;
-const FLIGHT_PRICE = 10;
-const MIN_COOKIES = 4;
-
-// ── STATE ───────────────────────────────────────────────────
-let cart = {}; // { key: { type, name, emoji, qty, price, unitPrice, packSize? } }
-let flightInCart = false;
-
-// ── INIT ────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────
 function init() {
-  // Flight flavors (set selection of 4)
+  // Starter Box flavor chips
   const FLIGHT_FLAVOR_IDS = ['cc', 'mm', 'tc'];
   const ff = document.getElementById('flightFlavors');
   COOKIES.filter(c => FLIGHT_FLAVOR_IDS.includes(c.id)).forEach(c => {
@@ -814,383 +446,53 @@ function init() {
     ff.appendChild(chip);
   });
 
-
-
-  // Individual rows
-  const indivContainer = document.getElementById('individualRows');
+  // Cookie menu rows (display only)
+  const container = document.getElementById('individualRows');
   COOKIES.forEach((c, i) => {
     const row = document.createElement('div');
     row.className = 'cookie-row';
-    row.id = `row-${c.id}`;
-    const thumbIndiv = c.photo
+    const thumb = c.photo
       ? `<div class="cookie-emoji-box" style="padding:0;overflow:hidden;"><img src="${c.photo}" style="width:100%;height:100%;object-fit:contain;" alt="${c.name}"></div>`
       : `<div class="cookie-emoji-box">${c.emoji}</div>`;
     row.innerHTML = `
-      <div class="cookie-row-top">
-        ${thumbIndiv}
-        <div class="cookie-row-info">
-          <div class="cookie-row-num">0${i+1}</div>
-          <div class="cookie-row-name">${c.name}</div>
-          <div class="cookie-row-desc">${c.desc}</div>
-        </div>
+      ${thumb}
+      <div class="cookie-row-info">
+        <div class="cookie-row-num">0${i + 1}</div>
+        <div class="cookie-row-name">${c.name}</div>
+        <div class="cookie-row-desc">${c.desc}</div>
       </div>
-      <div class="cookie-row-bottom">
-        <div class="cookie-price-tag">1–3: $4 · 4–11: $3.50 · 12+: $3.25</div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <button class="add-cookie-btn" id="add-btn-${c.id}" onclick="firstAdd('${c.id}')">+ Add</button>
-          <div class="stepper-wrap" id="stepper-${c.id}">
-            <button class="stepper-btn" onclick="adjustIndiv('${c.id}', -1)">−</button>
-            <div class="stepper-val" id="indiv-val-${c.id}">0</div>
-            <button class="stepper-btn" onclick="adjustIndiv('${c.id}', 1)">+</button>
-          </div>
-          <div class="cookie-row-subtotal" id="indiv-sub-${c.id}"></div>
-        </div>
-      </div>
+      <div class="cookie-price-highlight">$4</div>
     `;
-    indivContainer.appendChild(row);
-  });
-}
-
-
-// ── PRICING ────────────────────────────────────────────────
-// 1-3 cookies: $4.00 each | 4-11: $3.50 each | 12+: $3.25 each
-function getBoxPrice(count) {
-  if (count === 0) return { price: 0, label: null, savings: 0 };
-  const retail = count * 4;
-  let price, label;
-  if (count >= 12) {
-    price = count * 3.25;
-    label = 'Dozen rate ($3.25/cookie)';
-  } else if (count >= 4) {
-    price = count * 3.50;
-    label = 'Box rate ($3.50/cookie)';
-  } else {
-    price = count * 4;
-    label = null;
-  }
-  const savings = Math.max(0, retail - price);
-  return { price, label: savings > 0 ? label : null, savings };
-}
-// ── INDIVIDUAL LOGIC ────────────────────────────────────────
-function firstAdd(id) {
-  // Hide add button, show stepper, add 1
-  document.getElementById(`add-btn-${id}`).style.display = 'none';
-  document.getElementById(`stepper-${id}`).classList.add('visible');
-  adjustIndiv(id, 1);
-}
-
-function adjustIndiv(id, delta) {
-  const key = `indiv_${id}`;
-  const current = cart[key] ? cart[key].qty : 0;
-  const newQty = Math.max(0, current + delta);
-  const cookie = COOKIES.find(c => c.id === id);
-
-  if (newQty === 0) {
-    delete cart[key];
-    const addBtn = document.getElementById(`add-btn-${id}`);
-    const stepper = document.getElementById(`stepper-${id}`);
-    if (addBtn) addBtn.style.display = '';
-    if (stepper) stepper.classList.remove('visible');
-  } else {
-    cart[key] = {
-      type: 'individual',
-      name: cookie.name,
-      emoji: cookie.emoji,
-      qty: newQty,
-      unitPrice: INDIV_PRICE,
-      price: newQty * INDIV_PRICE // individual price; totalPrice() applies tier
-    };
-  }
-
-  document.getElementById(`indiv-val-${id}`).textContent = newQty;
-  const sub = document.getElementById(`indiv-sub-${id}`);
-  sub.textContent = newQty > 0 ? `$${newQty * INDIV_PRICE}` : '';
-
-  renderSummary();
-}
-
-// ── FLIGHT LOGIC ─────────────────────────────────────────────
-function addFlight() {
-  if (flightInCart) {
-    delete cart['flight'];
-    flightInCart = false;
-    document.getElementById('flightBtn').textContent = 'Add to Order';
-    document.getElementById('flightBtn').classList.remove('added');
-  } else {
-    cart['flight'] = {
-      type: 'flight',
-      name: 'The Starter Box',
-      emoji: '🍪✨',
-      qty: 1,
-      unitPrice: FLIGHT_PRICE,
-      price: FLIGHT_PRICE
-    };
-    flightInCart = true;
-    document.getElementById('flightBtn').textContent = 'Remove';
-    document.getElementById('flightBtn').classList.add('added');
-  }
-  renderSummary();
-}
-
-// ── REMOVE FROM SUMMARY ──────────────────────────────────────
-function removeItem(key) {
-  // If individual, also reset stepper
-  if (key.startsWith('indiv_')) {
-    const id = key.replace('indiv_', '');
-    document.getElementById(`indiv-val-${id}`).textContent = '0';
-    const sub = document.getElementById(`indiv-sub-${id}`);
-    if (sub) sub.textContent = '';
-  }
-  // If flight
-  if (key === 'flight') {
-    flightInCart = false;
-    document.getElementById('flightBtn').textContent = 'Add to Order';
-    document.getElementById('flightBtn').classList.remove('added');
-  }
-  delete cart[key];
-  renderSummary();
-}
-
-// ── COOKIE COUNT (for minimum check) ─────────────────────────
-function totalCookieCount() {
-  let count = 0;
-  Object.values(cart).forEach(item => {
-    if (item.type === 'individual') count += item.qty;
-    else if (item.type === 'pack') count += item.packSize * item.qty;
-    else if (item.type === 'flight') count += 4;
-  });
-  return count;
-}
-
-function totalPrice() {
-  // Individual cookies use tiered box pricing based on total count
-  let indivCount = 0;
-  let otherTotal = 0;
-  Object.values(cart).forEach(item => {
-    if (item.type === 'individual') indivCount += item.qty;
-    else otherTotal += item.price;
-  });
-  const { price: indivTotal } = getBoxPrice(indivCount);
-  return indivTotal + otherTotal;
-}
-
-// ── RENDER SUMMARY ───────────────────────────────────────────
-function renderSummary() {
-  const keys = Object.keys(cart);
-  const count = totalCookieCount();
-  const total = totalPrice();
-
-  // Badge
-  document.getElementById('cartBadge').textContent = count;
-
-  // Empty state
-  document.getElementById('summaryEmpty').style.display = keys.length === 0 ? 'block' : 'none';
-  document.getElementById('summaryItems').style.display = keys.length > 0 ? 'flex' : 'none';
-  document.getElementById('summaryFooter').style.display = keys.length > 0 ? 'block' : 'none';
-
-  // Items
-  const container = document.getElementById('summaryItems');
-  container.innerHTML = '';
-
-  // Calculate tiered pricing
-  const indivItems2 = Object.values(cart).filter(i => i.type === 'individual');
-  const indivCount2 = indivItems2.reduce((s,i) => s + i.qty, 0);
-  const { price: indivBoxPrice, label: tierLabel, savings } = getBoxPrice(indivCount2);
-  const retailPrice2 = indivCount2 * INDIV_PRICE;
-
-  keys.forEach(key => {
-    const item = cart[key];
-    const line = document.createElement('div');
-    line.className = 'summary-line';
-    let sub = '';
-    let displayPrice = item.price;
-    if (item.type === 'individual') {
-      sub = `${item.qty} × $${item.unitPrice} each`;
-      displayPrice = item.qty * item.unitPrice; // show retail before discount
-    } else if (item.type === 'flight') sub = 'Curated · CC, M&amp;M, Triple Choc';
-
-    line.innerHTML = `
-      <div>
-        <div class="summary-line-name">${item.emoji} ${item.name}</div>
-        <div class="summary-line-sub">${sub}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <div class="summary-line-price">$${displayPrice}</div>
-        <button class="summary-remove" onclick="removeItem('${key}')" title="Remove">✕</button>
-      </div>
-    `;
-    container.appendChild(line);
-  });
-
-  // Show discount line if applicable
-  if (savings > 0 && tierLabel && indivCount2 > 0) {
-    const discLine = document.createElement('div');
-    discLine.className = 'summary-line';
-    discLine.innerHTML = `
-      <div>
-        <div class="summary-line-name" style="color:#7AAD85;">🎉 ${tierLabel} discount</div>
-        <div class="summary-line-sub">Box pricing applied</div>
-      </div>
-      <div class="summary-line-price" style="color:#7AAD85;">−$${savings}</div>
-    `;
-    container.appendChild(discLine);
-  }
-
-  // Total with tiered pricing (reuse indivCount2, indivBoxPrice, tierLabel, savings from above)
-  const otherTotal2 = Object.values(cart).filter(i => i.type !== 'individual').reduce((s,i) => s + i.price, 0);
-  const grandTotal = indivBoxPrice + otherTotal2;
-  document.getElementById('summaryTotal').textContent = `$${grandTotal.toFixed(2)}`;
-
-  // Count note with tier info
-  const noteEl = document.getElementById('summaryCountNote');
-  if (tierLabel && indivCount2 > 0 && savings > 0) {
-    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:var(--accent)">You're saving $${savings.toFixed(2)}!</span>`;
-  } else if (indivCount2 > 0 && indivCount2 < 4) {
-    const needed = 4 - indivCount2;
-    noteEl.innerHTML = `${count} cookie${count !== 1 ? 's' : ''} · <span style="color:#C8A97E">Add ${needed} more to unlock $3.50/cookie</span>`;
-  } else {
-    noteEl.textContent = `${count} cookie${count !== 1 ? 's' : ''} in your order`;
-  }
-
-  // Min notice
-  const minNotice = document.getElementById('minNotice');
-  if (count > 0 && count < MIN_COOKIES) {
-    minNotice.className = 'min-notice warn';
-    minNotice.innerHTML = `<div class="min-notice-dot"></div>You need at least 4 cookies to check out — add ${MIN_COOKIES - count} more.`;
-  } else {
-    minNotice.className = 'min-notice';
-    minNotice.innerHTML = `<div class="min-notice-dot"></div>Minimum order is 4 cookies. Mix and match any flavors.`;
-  }
-
-  // Checkout button
-  const btn = document.getElementById('checkoutBtn');
-  const warn = document.getElementById('checkoutWarn');
-  const canCheckout = count >= MIN_COOKIES;
-  btn.disabled = !canCheckout;
-  warn.classList.toggle('show', count > 0 && !canCheckout);
-}
-
-// ── CHECKOUT MODAL ───────────────────────────────────────────
-function openCheckout() {
-  const count = totalCookieCount();
-  if (count < MIN_COOKIES) {
-    document.getElementById('checkoutWarn').classList.add('show');
-    return;
-  }
-
-  // Populate modal summary
-  const container = document.getElementById('modalSummaryItems');
-  container.innerHTML = '';
-
-  // Separate individual cookies from other items (flight)
-  const indivItems = Object.values(cart).filter(i => i.type === 'individual');
-  const otherItems = Object.values(cart).filter(i => i.type !== 'individual');
-
-  const indivCount = indivItems.reduce((s, i) => s + i.qty, 0);
-  const { price: indivBoxPrice, label: tierLabel, savings } = getBoxPrice(indivCount);
-  const retailPrice = indivCount * INDIV_PRICE;
-
-  // Render individual cookie lines at $4 each (retail)
-  indivItems.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'modal-summary-row';
-    row.innerHTML = `<span>${item.emoji} ${item.name} (×${item.qty})</span><span>$${item.qty * INDIV_PRICE}</span>`;
     container.appendChild(row);
   });
-
-  // Show discount line if applicable
-  if (savings > 0 && tierLabel) {
-    const subtotalRow = document.createElement('div');
-    subtotalRow.className = 'modal-summary-row';
-    subtotalRow.style.color = 'var(--grey)';
-    subtotalRow.style.fontSize = '0.78rem';
-    subtotalRow.innerHTML = `<span>Subtotal (${indivCount} cookies)</span><span>$${retailPrice}</span>`;
-    container.appendChild(subtotalRow);
-
-    const discountRow = document.createElement('div');
-    discountRow.className = 'modal-summary-row';
-    discountRow.style.color = '#7AAD85';
-    discountRow.innerHTML = `<span>🎉 ${tierLabel} discount</span><span>−$${savings}</span>`;
-    container.appendChild(discountRow);
-  }
-
-  // Render other items (Starter Box etc)
-  otherItems.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'modal-summary-row';
-    let label = item.name;
-    if (item.type === 'flight') label += ' (Curated 3-box)';
-    row.innerHTML = `<span>${item.emoji} ${label}</span><span>$${item.price}</span>`;
-    container.appendChild(row);
-  });
-
-  document.getElementById('modalTotal').textContent = `$${totalPrice().toFixed(2)}`;
-  document.getElementById('checkoutModal').classList.add('open');
-  document.getElementById('checkoutBody').style.display = 'block';
 }
 
-function closeCheckout() {
-  document.getElementById('checkoutModal').classList.remove('open');
-}
-
-// ── PLACE ORDER ──────────────────────────────────────────────
-
-// ── FULFILLMENT TOGGLE ────────────────────────────────────
+// ── FULFILLMENT TOGGLE ────────────────────────────────────────
 let fulfillmentMode = 'pickup';
+
+const NOTES = {
+  pickup: `<strong>Pickup available Tuesday–Saturday, 10AM–4PM</strong><br>
+    48 hours notice required. You'll select your pickup day and time on the next screen.`,
+  delivery: `<strong>Free Saturday delivery</strong> within Byron Center (49315) only.<br>
+    Delivery windows available 10AM–4PM. You must be present to receive your order.<br>
+    You'll enter your delivery address and time slot on the next screen.`
+};
 
 function setFulfillment(mode) {
   fulfillmentMode = mode;
   document.getElementById('pickupToggle').classList.toggle('active', mode === 'pickup');
   document.getElementById('deliveryToggle').classList.toggle('active', mode === 'delivery');
-  document.getElementById('pickupFields').classList.toggle('hide', mode === 'delivery');
-  document.getElementById('deliveryFields').classList.toggle('show', mode === 'delivery');
+  document.getElementById('fulfillmentNote').innerHTML = NOTES[mode];
 }
 
-
-
-
-
+// ── ORDER ─────────────────────────────────────────────────────
 function placeOrder() {
-  const PICKUP_LINK  = 'https://buy.stripe.com/test_14A9AVboP4A92ABe5W4wM00';
+  const PICKUP_LINK   = 'https://buy.stripe.com/test_14A9AVboP4A92ABe5W4wM00';
   const DELIVERY_LINK = 'https://buy.stripe.com/test_5kQ14p1Of7Ml1wx0f64wM01';
   window.location.href = fulfillmentMode === 'delivery' ? DELIVERY_LINK : PICKUP_LINK;
 }
 
-function finishOrder() {
-  cart = {};
-  flightInCart = false;
-  closeCheckout();
-  renderSummary();
-  // Reset all steppers
-  COOKIES.forEach(c => {
-    const el = document.getElementById(`indiv-val-${c.id}`);
-    if (el) el.textContent = '0';
-    const sub = document.getElementById(`indiv-sub-${c.id}`);
-    if (sub) sub.textContent = '';
-    const addBtn = document.getElementById(`add-btn-${c.id}`);
-    if (addBtn) addBtn.style.display = '';
-    const stepper = document.getElementById(`stepper-${c.id}`);
-    if (stepper) stepper.classList.remove('visible');
-  });
-  document.getElementById('flightBtn').textContent = 'Add to Order';
-  document.getElementById('flightBtn').classList.remove('added');
-  setFulfillment('pickup');
-}
-
-function flashBtn(btn) {
-  if (!btn) return;
-  const orig = btn.textContent;
-  btn.textContent = 'Added ✓';
-  btn.style.background = 'rgba(200,169,126,0.15)';
-  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1200);
-}
-
-// ── CLOSE MODAL ON OVERLAY CLICK ────────────────────────────
-// Disabled — clicking outside modal no longer closes it to prevent accidental order loss
-
-// ── RUN ──────────────────────────────────────────────────────
 init();
-renderSummary();
 </script>
 </body>
 </html>
