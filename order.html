@@ -155,6 +155,74 @@
     .order-layout { padding: 32px 16px; }
     footer { padding: 28px 16px; }
   }
+
+  /* ── CUSTOM CALENDAR ── */
+  .cal-wrap { position: relative; }
+  .cal-input {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(200,169,126,0.2);
+    color: var(--white); padding: 10px 12px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 300; outline: none; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: border-color 0.2s;
+  }
+  .cal-input:hover, .cal-input.open { border-color: var(--accent); }
+  .cal-input-text { color: var(--grey); }
+  .cal-input-text.selected { color: var(--white); }
+  .cal-icon { color: var(--accent); font-size: 0.9rem; }
+  .cal-dropdown {
+    display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: #1a1a1a; border: 1px solid rgba(200,169,126,0.3);
+    z-index: 200; padding: 16px; min-width: 280px;
+  }
+  .cal-dropdown.open { display: block; }
+  .cal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .cal-nav {
+    background: none; border: none; color: var(--accent); font-size: 1.1rem;
+    cursor: pointer; padding: 4px 8px; transition: color 0.2s;
+  }
+  .cal-nav:hover { color: var(--white); }
+  .cal-month-label {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+    font-weight: 300; color: var(--white); letter-spacing: 0.05em;
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .cal-day-header {
+    text-align: center; font-size: 0.62rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); padding: 4px 0; margin-bottom: 4px;
+  }
+  .cal-day {
+    text-align: center; padding: 7px 2px; font-size: 0.8rem;
+    cursor: pointer; border-radius: 2px; transition: background 0.15s, color 0.15s;
+    color: var(--white);
+  }
+  .cal-day:hover:not(.cal-disabled):not(.cal-empty) { background: rgba(200,169,126,0.2); }
+  .cal-day.cal-selected { background: var(--accent); color: var(--black); font-weight: 500; }
+  .cal-day.cal-disabled {
+    color: #333; cursor: not-allowed; text-decoration: line-through;
+    background: none !important;
+  }
+  .cal-day.cal-blocked {
+    color: #444; cursor: not-allowed; background: rgba(200,0,0,0.08) !important;
+    text-decoration: line-through;
+  }
+  .cal-day.cal-empty { cursor: default; }
+  .cal-day.cal-today { border: 1px solid rgba(200,169,126,0.3); }
+  .cal-legend {
+    display: flex; gap: 16px; margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.65rem;
+    color: var(--grey); letter-spacing: 0.05em;
+  }
+  .cal-legend-item { display: flex; align-items: center; gap: 6px; }
+  .cal-legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .cal-legend-dot.available { background: rgba(200,169,126,0.4); }
+  .cal-legend-dot.blocked { background: rgba(200,0,0,0.3); }
+  .cal-legend-dot.unavailable { background: #333; }
+
 </style>
 </head>
 <body>
@@ -263,7 +331,34 @@
         <div class="conditional-fields show" id="pickupFields">
           <div class="form-group">
             <label class="form-label">Pickup Date (Tue–Sat, min. 48 hrs notice)</label>
-            <input type="date" class="form-input" id="pickupDay" onchange="validatePickupDay(this)">
+            <div class="cal-wrap" id="pickupCal">
+              <div class="cal-input">
+                <span class="cal-input-text">— Select a date —</span>
+                <span class="cal-icon">📅</span>
+              </div>
+              <input type="hidden" class="cal-hidden" id="pickupDay">
+              <div class="cal-dropdown">
+                <div class="cal-header">
+                  <button class="cal-prev" type="button">‹</button>
+                  <div class="cal-month-label"></div>
+                  <button class="cal-next" type="button">›</button>
+                </div>
+                <div class="cal-grid">
+                  <div class="cal-day-header">Su</div>
+                  <div class="cal-day-header">Mo</div>
+                  <div class="cal-day-header">Tu</div>
+                  <div class="cal-day-header">We</div>
+                  <div class="cal-day-header">Th</div>
+                  <div class="cal-day-header">Fr</div>
+                  <div class="cal-day-header">Sa</div>
+                </div>
+                <div class="cal-legend">
+                  <div class="cal-legend-item"><div class="cal-legend-dot available"></div>Available</div>
+                  <div class="cal-legend-item"><div class="cal-legend-dot blocked"></div>Unavailable</div>
+                  <div class="cal-legend-item"><div class="cal-legend-dot unavailable"></div>Not a pickup day</div>
+                </div>
+              </div>
+            </div>
             <div class="date-warn" id="pickupDayWarn" style="display:none; font-size:0.72rem; color:#e08080; margin-top:6px;"></div>
           </div>
           <div class="form-group">
@@ -298,7 +393,34 @@
           </div>
           <div class="form-group">
             <label class="form-label">Delivery Date (Saturdays only, min. 48 hrs notice)</label>
-            <input type="date" class="form-input" id="deliveryDate" onchange="validateDeliveryDay(this)">
+            <div class="cal-wrap" id="deliveryCal">
+              <div class="cal-input">
+                <span class="cal-input-text">— Select a date —</span>
+                <span class="cal-icon">📅</span>
+              </div>
+              <input type="hidden" class="cal-hidden" id="deliveryDate">
+              <div class="cal-dropdown">
+                <div class="cal-header">
+                  <button class="cal-prev" type="button">‹</button>
+                  <div class="cal-month-label"></div>
+                  <button class="cal-next" type="button">›</button>
+                </div>
+                <div class="cal-grid">
+                  <div class="cal-day-header">Su</div>
+                  <div class="cal-day-header">Mo</div>
+                  <div class="cal-day-header">Tu</div>
+                  <div class="cal-day-header">We</div>
+                  <div class="cal-day-header">Th</div>
+                  <div class="cal-day-header">Fr</div>
+                  <div class="cal-day-header">Sa</div>
+                </div>
+                <div class="cal-legend">
+                  <div class="cal-legend-item"><div class="cal-legend-dot available"></div>Available</div>
+                  <div class="cal-legend-item"><div class="cal-legend-dot blocked"></div>Unavailable</div>
+                  <div class="cal-legend-item"><div class="cal-legend-dot unavailable"></div>Not a delivery day</div>
+                </div>
+              </div>
+            </div>
             <div class="date-warn" id="deliveryDateWarn" style="display:none; font-size:0.72rem; color:#e08080; margin-top:6px;"></div>
           </div>
           <div class="form-group">
@@ -415,6 +537,125 @@ async function loadBlockedDates() {
     console.warn('Could not load availability:', e);
     blockedDates = [];
   }
+}
+
+
+// ── CUSTOM CALENDAR ──────────────────────────────────────
+function buildCalendar(calId, mode) {
+  // mode: 'pickup' (Tue-Sat) or 'delivery' (Sat only)
+  const state = { year: new Date().getFullYear(), month: new Date().getMonth(), selected: null };
+
+  const wrap = document.getElementById(calId);
+  if (!wrap) return;
+
+  const input = wrap.querySelector('.cal-input');
+  const inputText = wrap.querySelector('.cal-input-text');
+  const dropdown = wrap.querySelector('.cal-dropdown');
+  const monthLabel = wrap.querySelector('.cal-month-label');
+  const grid = wrap.querySelector('.cal-grid');
+  const hiddenInput = wrap.querySelector('.cal-hidden');
+
+  function render() {
+    const months = ['January','February','March','April','May','June',
+                    'July','August','September','October','November','December'];
+    monthLabel.textContent = `${months[state.month]} ${state.year}`;
+
+    // Get min date (48hrs from now)
+    const minPickup = new Date(Date.now() + 48*60*60*1000);
+    const minDate = new Date(minPickup.getFullYear(), minPickup.getMonth(), minPickup.getDate());
+
+    // First day of month
+    const firstDay = new Date(state.year, state.month, 1).getDay();
+    const daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
+    const today = new Date();
+
+    // Clear grid (keep day headers)
+    const headers = grid.querySelectorAll('.cal-day-header');
+    grid.innerHTML = '';
+    headers.forEach(h => grid.appendChild(h.cloneNode(true)));
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-day cal-empty';
+      grid.appendChild(empty);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(state.year, state.month, d);
+      const dateStr = `${state.year}-${String(state.month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dayOfWeek = date.getDay();
+      const cell = document.createElement('div');
+      cell.className = 'cal-day';
+      cell.textContent = d;
+
+      const isToday = date.toDateString() === today.toDateString();
+      if (isToday) cell.classList.add('cal-today');
+
+      // Determine if this day is valid for this mode
+      const isValidDay = mode === 'pickup'
+        ? (dayOfWeek >= 2 && dayOfWeek <= 6)  // Tue-Sat
+        : (dayOfWeek === 6);                   // Sat only
+
+      const isPast = date < minDate;
+      const isBlocked = isDateBlocked(dateStr);
+
+      if (!isValidDay || isPast) {
+        cell.classList.add('cal-disabled');
+      } else if (isBlocked) {
+        cell.classList.add('cal-blocked');
+        cell.title = 'Unavailable';
+      } else {
+        cell.addEventListener('click', () => {
+          state.selected = dateStr;
+          hiddenInput.value = dateStr;
+          const formatted = date.toLocaleDateString('en-US', { weekday:'short', month:'long', day:'numeric', year:'numeric' });
+          inputText.textContent = formatted;
+          inputText.classList.add('selected');
+          dropdown.classList.remove('open');
+          input.classList.remove('open');
+          // Trigger validation
+          const event = new Event('change');
+          hiddenInput.dispatchEvent(event);
+        });
+      }
+
+      if (state.selected === dateStr) cell.classList.add('cal-selected');
+      grid.appendChild(cell);
+    }
+  }
+
+  // Nav buttons
+  wrap.querySelector('.cal-prev').addEventListener('click', () => {
+    state.month--;
+    if (state.month < 0) { state.month = 11; state.year--; }
+    render();
+  });
+  wrap.querySelector('.cal-next').addEventListener('click', () => {
+    state.month++;
+    if (state.month > 11) { state.month = 0; state.year++; }
+    render();
+  });
+
+  // Toggle dropdown
+  input.addEventListener('click', () => {
+    dropdown.classList.toggle('open');
+    input.classList.toggle('open');
+    render();
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!wrap.contains(e.target)) {
+      dropdown.classList.remove('open');
+      input.classList.remove('open');
+    }
+  });
+
+  render();
+
+  // Return getter
+  return () => state.selected;
 }
 
 function isDateBlocked(dateStr) {
@@ -653,8 +894,10 @@ function resetForm() {
   document.getElementById('successScreen').classList.remove('show');
 }
 
-loadBlockedDates();
-setMinDates();
+loadBlockedDates().then(() => {
+  buildCalendar("pickupCal", "pickup");
+  buildCalendar("deliveryCal", "delivery");
+});
 init();
 renderSummary();
 </script>
