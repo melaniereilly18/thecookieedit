@@ -285,6 +285,45 @@
       <div class="box-card-price">$39</div>
     </div>
 
+    <!-- MINI COOKIE FLIGHTS -->
+    <div class="menu-section-label">Mini Cookie Flights · 6 Minis · $10 each</div>
+
+    <!-- Signature Flight -->
+    <div class="box-card">
+      <div class="box-card-img">
+        <img src="images/signature-flight.png" alt="The Signature Flight" onerror="this.parentNode.innerHTML='🍪'">
+      </div>
+      <div class="box-card-info">
+        <div class="box-card-tag">Curated · 6 Minis</div>
+        <div class="box-card-name">The Signature Flight</div>
+        <div class="box-card-desc">Chocolate Chip, M&amp;M, and Triple Chocolate — six mini cookies, all your classic favorites.</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="updateQty('signature', -1)">−</button>
+          <div class="qty-display" id="qty-signature">0</div>
+          <button class="qty-btn" onclick="updateQty('signature', 1)">+</button>
+        </div>
+      </div>
+      <div class="box-card-price">$10</div>
+    </div>
+
+    <!-- Specialty Flight -->
+    <div class="box-card">
+      <div class="box-card-img">
+        <img src="images/specialty-flight.png" alt="The Specialty Flight" onerror="this.parentNode.innerHTML='🍪'">
+      </div>
+      <div class="box-card-info">
+        <div class="box-card-tag">Curated · 6 Minis</div>
+        <div class="box-card-name">The Specialty Flight</div>
+        <div class="box-card-desc">Salted Caramel, Red Velvet, and Loaded Biscoff — six mini cookies of our most indulgent flavors.</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="updateQty('specialty', -1)">−</button>
+          <div class="qty-display" id="qty-specialty">0</div>
+          <button class="qty-btn" onclick="updateQty('specialty', 1)">+</button>
+        </div>
+      </div>
+      <div class="box-card-price">$10</div>
+    </div>
+
     <!-- INDIVIDUAL COOKIES -->
     <div class="menu-section-label">Individual Cookies · $4 each · 4 minimum</div>
     <div id="cookieRows"></div>
@@ -458,10 +497,9 @@
 
         <!-- PAYMENT INFO -->
         <div class="payment-info show">
-          <strong>How to pay:</strong> Once your order is confirmed, please send payment via Venmo or Cash App. We'll confirm your order by email after payment is received.<br>
+          <strong>How to pay:</strong> Once your order is confirmed, please send payment via Venmo. We'll confirm your order by email after payment is received.<br>
           <div class="payment-handles">
             <span class="payment-handle">Venmo: @thecookieedit</span>
-            <span class="payment-handle">Cash App: $melbellereilly</span>
           </div>
           <span style="font-size:0.7rem;color:var(--grey);">Include your name and order date in the payment note.</span>
         </div>
@@ -473,11 +511,10 @@
       <div class="success-screen" id="successScreen">
         <div class="success-icon">🍪</div>
         <h3>Order Received!</h3>
-        <p>Thanks <strong id="successName"></strong>! Your order has been submitted. Please send your total via Venmo or Cash App to complete your order.</p>
+        <p>Thanks <strong id="successName"></strong>! Your order has been submitted. Please send your total via Venmo to complete your order.</p>
         <div class="success-total" id="successTotal"></div>
         <div class="success-handles">
           <div class="success-handle">Venmo: @thecookieedit</div>
-          <div class="success-handle">Cash App: $melbellereilly</div>
         </div>
         <p style="font-size:0.75rem;">Include your name and order date in the payment note.<br>We'll send a confirmation email once payment is received.</p>
         <button class="reset-btn" onclick="resetForm()">Place Another Order</button>
@@ -707,10 +744,10 @@ const COOKIES = [
   { id: 'cnc', name: 'Cookies & Cream',         photo: 'images/cookies-and-cream.png', desc: 'Chocolate dough, crushed Oreos, and white chocolate chips.' },
 ];
 
-const PRICES = { starter: 10, dozen: 39, individual: 4 };
+const PRICES = { starter: 10, dozen: 39, signature: 10, specialty: 10, individual: 4 };
 const MIN_INDIVIDUAL = 4;
 
-let cart = { starter: 0, dozen: 0 };
+let cart = { starter: 0, dozen: 0, signature: 0, specialty: 0 };
 COOKIES.forEach(c => cart[c.id] = 0);
 
 let fulfillmentMode = 'pickup';
@@ -759,8 +796,10 @@ function renderSummary() {
   let total = 0;
   let individualCount = 0;
 
-  if (cart.starter > 0) { lines.push({ name: `Starter Box ×${cart.starter}`, price: cart.starter * PRICES.starter }); total += cart.starter * PRICES.starter; }
-  if (cart.dozen > 0)   { lines.push({ name: `Dozen Box ×${cart.dozen}`,     price: cart.dozen   * PRICES.dozen   }); total += cart.dozen   * PRICES.dozen;   }
+  if (cart.starter > 0)    { lines.push({ name: `Starter Box ×${cart.starter}`,       price: cart.starter    * PRICES.starter    }); total += cart.starter    * PRICES.starter;    }
+  if (cart.dozen > 0)      { lines.push({ name: `Dozen Box ×${cart.dozen}`,           price: cart.dozen      * PRICES.dozen      }); total += cart.dozen      * PRICES.dozen;      }
+  if (cart.signature > 0)  { lines.push({ name: `Signature Flight ×${cart.signature}`, price: cart.signature  * PRICES.signature  }); total += cart.signature  * PRICES.signature;  }
+  if (cart.specialty > 0)  { lines.push({ name: `Specialty Flight ×${cart.specialty}`, price: cart.specialty  * PRICES.specialty  }); total += cart.specialty  * PRICES.specialty;  }
 
   COOKIES.forEach(c => {
     if (cart[c.id] > 0) {
@@ -785,8 +824,8 @@ function renderSummary() {
 
   totalEl.textContent = `$${total.toFixed(2)}`;
 
-  // Validate: must have min 4 individual cookies OR at least one box
-  const hasBox = cart.starter > 0 || cart.dozen > 0;
+  // Validate: must have min 4 individual cookies OR at least one box/flight
+  const hasBox = cart.starter > 0 || cart.dozen > 0 || cart.signature > 0 || cart.specialty > 0;
   const meetsIndividualMin = individualCount === 0 || individualCount >= MIN_INDIVIDUAL;
   const hasAnything = total > 0;
   const valid = hasAnything && meetsIndividualMin;
@@ -834,14 +873,18 @@ function submitOrder() {
 
   // Build summary string
   let summaryParts = [];
-  if (cart.starter > 0) summaryParts.push(`Starter Box x${cart.starter}`);
-  if (cart.dozen   > 0) summaryParts.push(`Dozen Box x${cart.dozen}`);
+  if (cart.starter > 0)   summaryParts.push(`Starter Box x${cart.starter}`);
+  if (cart.dozen   > 0)   summaryParts.push(`Dozen Box x${cart.dozen}`);
+  if (cart.signature > 0) summaryParts.push(`Signature Flight x${cart.signature}`);
+  if (cart.specialty > 0) summaryParts.push(`Specialty Flight x${cart.specialty}`);
   COOKIES.forEach(c => { if (cart[c.id] > 0) summaryParts.push(`${c.name} x${cart[c.id]}`); });
   const orderSummary = summaryParts.join(', ');
 
   let total = 0;
-  if (cart.starter > 0) total += cart.starter * PRICES.starter;
-  if (cart.dozen   > 0) total += cart.dozen   * PRICES.dozen;
+  if (cart.starter > 0)   total += cart.starter   * PRICES.starter;
+  if (cart.dozen   > 0)   total += cart.dozen     * PRICES.dozen;
+  if (cart.signature > 0) total += cart.signature * PRICES.signature;
+  if (cart.specialty > 0) total += cart.specialty * PRICES.specialty;
   COOKIES.forEach(c => { total += cart[c.id] * PRICES.individual; });
 
   const fulfillmentDetails = fulfillmentMode === 'pickup'
@@ -873,10 +916,12 @@ function showSuccess(name, total) {
 
 function resetForm() {
   // Reset cart
-  cart = { starter: 0, dozen: 0 };
+  cart = { starter: 0, dozen: 0, signature: 0, specialty: 0 };
   COOKIES.forEach(c => { cart[c.id] = 0; document.getElementById('qty-' + c.id).textContent = 0; });
   document.getElementById('qty-starter').textContent = 0;
   document.getElementById('qty-dozen').textContent = 0;
+  document.getElementById('qty-signature').textContent = 0;
+  document.getElementById('qty-specialty').textContent = 0;
   renderSummary();
 
   // Reset form
