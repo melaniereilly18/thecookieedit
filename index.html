@@ -453,12 +453,12 @@
     <div class="pickup-value">Byron Center, MI</div>
   </div>
   <div class="pickup-item">
-    <div class="pickup-label">Pickup Hours</div>
-    <div class="pickup-value">Tue–Sat, 10–6</div>
+    <div class="pickup-label">Porch Pickup</div>
+    <div class="pickup-value">Fri 4–7 · Sat 10–1</div>
   </div>
   <div class="pickup-item">
-    <div class="pickup-label">Lead Time</div>
-    <div class="pickup-value">48 hrs notice</div>
+    <div class="pickup-label">Order By</div>
+    <div class="pickup-value">Wednesday midnight</div>
   </div>
   <div class="pickup-item">
     <div class="pickup-label">Minimum</div>
@@ -472,7 +472,7 @@
 <div class="delivery-strip" style="background: var(--accent); padding: 20px 48px; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
   <span style="font-size: 1.2rem;">🚗</span>
   <span style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; color: var(--black); letter-spacing: 0.05em;">
-    Free Saturday delivery within Byron Center
+    Free Sunday delivery within Byron Center · 12–2pm
   </span>
   <span style="font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--black); opacity: 0.7;">· 49315</span>
   <a href="order.html" style="margin-left: 8px; background: var(--black); color: var(--accent); padding: 8px 20px; font-family: 'DM Sans', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: opacity 0.2s;">Order Now</a>
@@ -559,7 +559,7 @@
 <footer>
   <div class="footer-logo">The Cookie <span>Edit</span></div>
   <div class="footer-info">
-    Byron Center, MI · Pickup only<br>
+    Byron Center, MI · Porch Pickup &amp; Sunday Delivery<br>
     <a href="mailto:orders@thecookieedit.com">orders@thecookieedit.com</a>
   </div>
   <div class="footer-social">
@@ -583,7 +583,7 @@
 <script>
 // ── MARQUEE ──────────────────────────────────────────────
 function buildMarquee() {
-  const items = ['Small Batch', 'Byron Center MI', 'Pickup Only', 'Made to Order', 'Oversized Cookies', 'Premium Ingredients', 'The Cookie Edit'];
+  const items = ['Small Batch', 'Byron Center MI', 'Porch Pickup', 'Made to Order', 'Oversized Cookies', 'Premium Ingredients', 'The Cookie Edit'];
   const track = document.getElementById('marqueeTrack');
   const html = items.map(i => `<span class="marquee-item">${i}</span><span class="marquee-item" style="opacity:0.3">✦</span>`).join('');
   track.innerHTML = html + html;
