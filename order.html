@@ -362,7 +362,7 @@
           <input type="email" class="form-input" id="custEmail" placeholder="your@email.com" required>
         </div>
         <div class="form-group">
-          <label class="form-label">Phone</label>
+          <label class="form-label">Mobile Phone (for order texts)</label>
           <input type="tel" class="form-input" id="custPhone" placeholder="(616) 555-0100" required>
         </div>
 
@@ -468,7 +468,7 @@
 
         <!-- PAYMENT INFO -->
         <div class="payment-info show">
-          <strong>How to pay:</strong> After you submit, send your total via Venmo. Your order is confirmed once payment is received. Porch pickup orders must be paid in advance — unpaid orders won't be placed in the cabinet.<br>
+          <strong>How to pay:</strong> After you submit, send your total via Venmo. Once payment is received, we'll text you a confirmation (with our porch pickup address for pickup orders). Porch pickup orders must be paid in advance — unpaid orders won't be placed in the cabinet.<br>
           <div class="payment-handles">
             <span class="payment-handle">Venmo: @thecookieedit</span>
           </div>
@@ -487,7 +487,7 @@
         <div class="success-handles">
           <div class="success-handle">Venmo: @thecookieedit</div>
         </div>
-        <p style="font-size:0.75rem;">Include your name and order date in the payment note.<br>We'll send a confirmation email once payment is received.</p>
+        <p style="font-size:0.75rem;">Include your name and order date in the payment note.<br>We'll text you a confirmation once payment is received.</p>
         <div class="window-note" id="successFulfillment" style="text-align:left;"></div>
         <button class="reset-btn" onclick="resetForm()">Place Another Order</button>
       </div>
@@ -879,7 +879,7 @@ function submitOrder() {
     ? `Porch Pickup — ${dateVal} (${prettyDate}, ${windowTime})`
     : `Delivery — ${dateVal} (${prettyDate}, ${windowTime}) — ${document.getElementById('deliveryAddress').value.trim()}`;
   const successDetails = fulfillmentMode === 'pickup'
-    ? `<strong>Porch pickup · ${prettyDate}, ${windowTime}</strong><br>We'll email you our pickup address with your confirmation. Once paid, your order will be in the porch cabinet, labeled with your name, by the start of your window — just come grab it. Orders not picked up by the end of the window are brought inside; message us to arrange pickup.`
+    ? `<strong>Porch pickup · ${prettyDate}, ${windowTime}</strong><br>Once payment is received, we'll text you a confirmation with our porch pickup address. Your order will be in the porch cabinet, labeled with your name, by the start of your window — just come grab it. Orders not picked up by the end of the window are brought inside; message us to arrange pickup.`
     : `<strong>Free delivery · ${prettyDate}, ${windowTime}</strong><br>We'll text you when we're on the way. Please make sure someone is home to receive your order.`;
 
   // Submit to Netlify Forms
