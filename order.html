@@ -253,17 +253,17 @@
   <!-- LEFT: MENU -->
   <div>
     <!-- BOXES -->
-    <div class="menu-section-label">Curated Boxes</div>
+    <div class="menu-section-label">Pick Your Flavors</div>
 
-    <!-- Starter Box -->
+    <!-- The Trio -->
     <div class="box-card">
       <div class="box-card-img">
-        <img src="images/starter-pack.png" alt="Starter Box" onerror="this.parentNode.innerHTML='🍪'">
+        <img src="images/starter-pack.png" alt="The Trio" onerror="this.parentNode.innerHTML='🍪'">
       </div>
       <div class="box-card-info">
-        <div class="box-card-tag">Curated · 3 Cookies</div>
-        <div class="box-card-name">The Starter Box</div>
-        <div class="box-card-desc">Pick any 3 flavors from our full lineup — your choice, curated your way.</div>
+        <div class="box-card-tag">Your Choice · 3 Cookies</div>
+        <div class="box-card-name">The Trio</div>
+        <div class="box-card-desc">Any 3 flavors from our full lineup, packed in a bag — list your picks in the flavor notes below.</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="updateQty('starter', -1)">−</button>
           <div class="qty-display" id="qty-starter">0</div>
@@ -331,7 +331,7 @@
     </div>
 
     <!-- INDIVIDUAL COOKIES -->
-    <div class="menu-section-label">Individual Cookies · $4 each · 4 minimum</div>
+    <div class="menu-section-label">Individual Cookies · $4 each · 3 minimum</div>
     <div id="cookieRows"></div>
 
   </div>
@@ -349,7 +349,7 @@
         <span class="summary-total-label">Total</span>
         <span class="summary-total-amt" id="summaryTotal">$0.00</span>
       </div>
-      <div class="summary-min-warn" id="minWarn">Minimum 4 individual cookies for online orders.</div>
+      <div class="summary-min-warn" id="minWarn">Minimum 3 individual cookies — or grab The Trio for $10.</div>
 
       <!-- ORDER FORM -->
       <div class="order-form" id="orderForm">
@@ -462,8 +462,8 @@
 
         <!-- FLAVOR NOTES -->
         <div class="form-group">
-          <label class="form-label">Dozen Box Flavor Notes &amp; Special Requests</label>
-          <textarea class="form-input" id="flavorNotes" placeholder="If ordering a Dozen Box, list your 12 cookie flavors here. Any other requests welcome."></textarea>
+          <label class="form-label">Flavor Picks &amp; Special Requests</label>
+          <textarea class="form-input" id="flavorNotes" placeholder="The Trio: list your 3 flavors. Dozen Box: list your 12 flavors. Any other requests welcome."></textarea>
         </div>
 
         <!-- PAYMENT INFO -->
@@ -728,7 +728,7 @@ const COOKIES = [
 ];
 
 const PRICES = { starter: 10, dozen: 39, signature: 10, specialty: 10, individual: 4 };
-const MIN_INDIVIDUAL = 4;
+const MIN_INDIVIDUAL = 3;
 
 let cart = { starter: 0, dozen: 0, signature: 0, specialty: 0 };
 COOKIES.forEach(c => cart[c.id] = 0);
@@ -779,7 +779,7 @@ function renderSummary() {
   let total = 0;
   let individualCount = 0;
 
-  if (cart.starter > 0)    { lines.push({ name: `Starter Box ×${cart.starter}`,       price: cart.starter    * PRICES.starter    }); total += cart.starter    * PRICES.starter;    }
+  if (cart.starter > 0)    { lines.push({ name: `The Trio ×${cart.starter}`,       price: cart.starter    * PRICES.starter    }); total += cart.starter    * PRICES.starter;    }
   if (cart.dozen > 0)      { lines.push({ name: `Dozen Box ×${cart.dozen}`,           price: cart.dozen      * PRICES.dozen      }); total += cart.dozen      * PRICES.dozen;      }
   if (cart.signature > 0)  { lines.push({ name: `Signature Flight ×${cart.signature}`, price: cart.signature  * PRICES.signature  }); total += cart.signature  * PRICES.signature;  }
   if (cart.specialty > 0)  { lines.push({ name: `Specialty Flight ×${cart.specialty}`, price: cart.specialty  * PRICES.specialty  }); total += cart.specialty  * PRICES.specialty;  }
@@ -807,7 +807,7 @@ function renderSummary() {
 
   totalEl.textContent = `$${total.toFixed(2)}`;
 
-  // Validate: must have min 4 individual cookies OR at least one box/flight
+  // Validate: must have min 3 individual cookies OR at least one box/flight
   const hasBox = cart.starter > 0 || cart.dozen > 0 || cart.signature > 0 || cart.specialty > 0;
   const meetsIndividualMin = individualCount === 0 || individualCount >= MIN_INDIVIDUAL;
   const hasAnything = total > 0;
@@ -834,6 +834,13 @@ function submitOrder() {
 
   if (!name || !email || !phone) { alert('Please fill in your name, email, and phone number.'); return; }
 
+  if ((cart.starter > 0 || cart.dozen > 0) && !document.getElementById('flavorNotes').value.trim()) {
+    const which = [cart.starter > 0 ? 'The Trio (3)' : null, cart.dozen > 0 ? 'the Dozen Box (12)' : null].filter(Boolean).join(' and ');
+    alert(`Please list your flavor picks for ${which} in the Flavor Picks box.`);
+    document.getElementById('flavorNotes').focus();
+    return;
+  }
+
   // Fulfillment validation
   if (fulfillmentMode === 'pickup') {
     const pickupDay = document.getElementById('pickupDay').value;
@@ -854,7 +861,7 @@ function submitOrder() {
 
   // Build summary string
   let summaryParts = [];
-  if (cart.starter > 0)   summaryParts.push(`Starter Box x${cart.starter}`);
+  if (cart.starter > 0)   summaryParts.push(`The Trio x${cart.starter}`);
   if (cart.dozen   > 0)   summaryParts.push(`Dozen Box x${cart.dozen}`);
   if (cart.signature > 0) summaryParts.push(`Signature Flight x${cart.signature}`);
   if (cart.specialty > 0) summaryParts.push(`Specialty Flight x${cart.specialty}`);
